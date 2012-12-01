@@ -25,7 +25,6 @@ function add_crowdios_type() {
     'not_found_in_trash' => __('No Requests for Ideas found in Trash', 'crowdio_rfis'), 
     'parent_item_colon' => '',
     'menu_name' => __('Requests for Ideas', 'crowdio_rfis')
-
   );
   $args = array(
     'labels' => $labels,

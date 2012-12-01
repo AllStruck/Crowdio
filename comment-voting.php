@@ -93,7 +93,7 @@ function crowdio_show_options_page() {
    if (0 == get_option('crowdio_show_thankyou') % 4)
       print('
          <div style="width: 75%; background-color: yellow;">
-         <em><b> Thank you for choosing Comment Rating.  If you like the
+         <em><b> Thank you for choosing Crowdio.  If you like the
          plugin, please help promoting its use. You can rate it at
          <a href="http://wordpress.org/extend/plugins/crowdio-comments/">WordPress.org Plugins</a>.
          </b>
@@ -101,8 +101,8 @@ function crowdio_show_options_page() {
          </div>
          ');
    update_option('crowdio_show_thankyou', get_option('crowdio_show_thankyou')+1);
-
-	include(COMMENTRATING_PATH.'/crowdio-setting.php');
+   
+   include(plugin_dir_path(__FILE__) .'crowdio-settings.php');
 }
 
 // set the default values to options

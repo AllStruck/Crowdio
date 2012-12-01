@@ -1,11 +1,11 @@
 <?php
 /*
-License: Copyright 2009 Bob King.  http://WealthyNetizen.com/
+License: Copyright 2009 Crowdio.  http://WealthyNetizen.com/
 
     The program is distributed under the terms of the GNU General
     Public License GPLv3.
 
-    This file is part of Comment Rating Wordpress plugin
+    This file is part of Crowdio Wordpress plugin
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,17 +22,17 @@ License: Copyright 2009 Bob King.  http://WealthyNetizen.com/
 */
 ?>
    <p>
-   The Pro version of Comment Rating allows voting by logged-in users only, fraud
+   The Pro version of Crowdio allows voting by logged-in users only, fraud
    detection with user ID, IP, <br/>
    Cookie or off entirely, styling with
    CSS, controling inserting rating images to Posts only, Pages only or both, <br/>
-   or on selected post IDs. etc. <a href="http://wealthynetizen.com/comment-rating-pro/">Comment Rating Pro</a>. <br/><br/>
-   Comment Rating also has a companion widget plugin <a href="http://wealthynetizen.com/comment-rating-widget/">Comment Rating Widget</a>. <br/>
+   or on selected post IDs. etc. <a href="http://wealthynetizen.com/comment-rating-pro/">Crowdio Pro</a>. <br/><br/>
+   Crowdio also has a companion widget plugin <a href="http://wealthynetizen.com/comment-rating-widget/">Crowdio Widget</a>. <br/>
    To sort comments by votes, hide poor comments entirely, or show images neatly, 
    <a href="http://wealthynetizen.com/donate/customize-your-theme/">ask me to help</a>. <br/>
 
    Questions or Problems: <a href="http://wealthynetizen.com/comment-rating-plugin-faq/">
-   Comment Rating Plugin FAQ</a>. 
+   Crowdio Plugin FAQ</a>. 
    Feature requests: <a href="http://wealthynetizen.com/comment-rating-plugin-todo-list/">Comment
    Rating Todo List</a>.
    </p>
@@ -361,7 +361,7 @@ License: Copyright 2009 Bob King.  http://WealthyNetizen.com/
 
    <p> 
    <b>Customizing Theme:</b>
-   The Comment Rating plugin can automatically insert
+   The Crowdio plugin can automatically insert
    ratings and images into comments. You can also turn off
    auto-insertion and customize your theme in
    the "comments.php" file within the "Comments Loop" with the following line.
