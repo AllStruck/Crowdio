@@ -1,5 +1,13 @@
 <?php
 
+/* 		--- Comments and Rating Database Schema ---
+				== Comments ==
+	- User ID - IP - Session - Comment -  Timestamp - 
+	
+				== Votes ==
+	- User ID - IP - Direction - Browser - Session ID - Timestamp - 
+*/
+
 add_action('comment_post', 'crowdio_comment_posted');
 add_action('admin_menu', 'crowdio_options_page');
 add_action('wp_head', 'crowdio_add_highlight_style');
