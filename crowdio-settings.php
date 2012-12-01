@@ -21,7 +21,7 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 ?>
-   <form id="cloudioRating_option" name="cloudioRating_option" action="options-general.php?page=cloudioRating" method="post">
+   <form id="crowdioRating_option" name="crowdioRating_option" action="options-general.php?page=crowdioRating" method="post">
 
    <table style="margin-bottom:5px">
    <tr>
@@ -33,9 +33,9 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
       Position the images above or below comments:
    </td>
    <td>
-     <select name="cloudioRating_position" id="cloudioRating_position">
+     <select name="crowdioRating_position" id="crowdioRating_position">
 <?php
-   if (get_option('cloudioRating_position') == 'below')
+   if (get_option('crowdioRating_position') == 'below')
       print('<option selected="selected" value="below">Below</option>
              <option value="above">Above</option>');
    else
@@ -50,7 +50,7 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
        Words before the rating images (default):
    </td>
    <td>
-      <input type="text" size="50" name="cloudioRating_words" value="<?php echo get_option('cloudioRating_words'); ?>">
+      <input type="text" size="50" name="crowdioRating_words" value="<?php echo get_option('crowdioRating_words'); ?>">
    </td>
    </tr>
    <tr>
@@ -58,9 +58,9 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
        Turn off rating for comments by admin/author :
    </td>
    <td>
-   <select name="cloudioRating_admin_off" id="cloudioRating_admin_off">
-      <option value="yes" <?php if (get_option('cloudioRating_admin_off') == 'yes') print('selected="selected"');?> >Yes</option>
-      <option value="no" <?php if (!(get_option('cloudioRating_admin_off') == 'yes')) print('selected="selected"');?>>No</option>
+   <select name="crowdioRating_admin_off" id="crowdioRating_admin_off">
+      <option value="yes" <?php if (get_option('crowdioRating_admin_off') == 'yes') print('selected="selected"');?> >Yes</option>
+      <option value="no" <?php if (!(get_option('crowdioRating_admin_off') == 'yes')) print('selected="selected"');?>>No</option>
    </select>
    </td>
    </tr>
@@ -70,9 +70,9 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
        choose 'No' to avoid messy styling.)
    </td>
    <td>
-   <select name="cloudioRating_style_comment_box" id="cloudioRating_style_comment_box">
-      <option value="yes" <?php if (!(get_option('cloudioRating_style_comment_box') == 'no')) print('selected="selected"');?> >Yes</option>
-      <option value="no" <?php if (get_option('cloudioRating_style_comment_box') == 'no') print('selected="selected"');?>>No</option>
+   <select name="crowdioRating_style_comment_box" id="crowdioRating_style_comment_box">
+      <option value="yes" <?php if (!(get_option('crowdioRating_style_comment_box') == 'no')) print('selected="selected"');?> >Yes</option>
+      <option value="no" <?php if (get_option('crowdioRating_style_comment_box') == 'no') print('selected="selected"');?>>No</option>
    </select>
    </td>
    </tr>
@@ -81,11 +81,11 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
        Select allowed vote type (Likes, Dislikes or Both):
    </td>
    <td>
-   <select name="cloudioRating_vote_type" id="cloudioRating_vote_type">
-      <option value="likes" <?php if (!(get_option('cloudioRating_vote_type') == 'likes')) print('selected="selected"');?> >Likes Only</option>
-      <option value="dislikes" <?php if (get_option('cloudioRating_vote_type') == 'dislikes') print('selected="selected"');?>>Dislikes Only</option>
-      <option value="both" <?php if ( get_option('cloudioRating_vote_type') !== 'dislikes' &&
-                                      get_option('cloudioRating_vote_type') !== 'likes' )
+   <select name="crowdioRating_vote_type" id="crowdioRating_vote_type">
+      <option value="likes" <?php if (!(get_option('crowdioRating_vote_type') == 'likes')) print('selected="selected"');?> >Likes Only</option>
+      <option value="dislikes" <?php if (get_option('crowdioRating_vote_type') == 'dislikes') print('selected="selected"');?>>Dislikes Only</option>
+      <option value="both" <?php if ( get_option('crowdioRating_vote_type') !== 'dislikes' &&
+                                      get_option('crowdioRating_vote_type') !== 'likes' )
                                  print('selected="selected"');?>>Both</option>
    </select>
    </td>
@@ -95,11 +95,11 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
       Select the mouse-over image effect:
    </td>
    <td>
-       <input type="radio" name="cloudioRating_mouseover" value="1"
-          <?php if (get_option('cloudioRating_mouseover') == 1) echo 'checked';?> >
+       <input type="radio" name="crowdioRating_mouseover" value="1"
+          <?php if (get_option('crowdioRating_mouseover') == 1) echo 'checked';?> >
           No effect
-       <input type="radio" name="cloudioRating_mouseover" value="2"
-          <?php if (get_option('cloudioRating_mouseover') == 2) echo 'checked';?> >
+       <input type="radio" name="crowdioRating_mouseover" value="2"
+          <?php if (get_option('crowdioRating_mouseover') == 2) echo 'checked';?> >
           Enlarge 
    </td>
    </tr>
@@ -109,8 +109,8 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
       Highly-rated comments have (Likes - Dislikes) >=
    </td>
    <td>
-      <input type="text" size="2" name="cloudioRating_goodRate"
-      value="<?php echo get_option('cloudioRating_goodRate'); ?>"> 
+      <input type="text" size="2" name="crowdioRating_goodRate"
+      value="<?php echo get_option('crowdioRating_goodRate'); ?>"> 
    </td>
    </tr>
    <tr>
@@ -118,8 +118,8 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
        Style highly-rated comments with:
    </td>
    <td>
-      <input type="text" size="50" name="cloudioRating_styleComment"
-      value="<?php echo get_option('cloudioRating_styleComment'); ?>">
+      <input type="text" size="50" name="crowdioRating_styleComment"
+      value="<?php echo get_option('crowdioRating_styleComment'); ?>">
    </td>
    </tr>
    <tr>
@@ -127,7 +127,7 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
        Words before the images for the highly-rated:
    </td>
    <td>
-      <input type="text" size="50" name="cloudioRating_words_good" value="<?php echo get_option('cloudioRating_words_good'); ?>">
+      <input type="text" size="50" name="crowdioRating_words_good" value="<?php echo get_option('crowdioRating_words_good'); ?>">
    </td>
    </tr>
    <tr><td><br/></td> </tr>
@@ -136,7 +136,7 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
       Poorly-rated comments have (Dislikes - Likes) >=
    </td>
    <td>
-      <input type="text" size="2" name="cloudioRating_negative" value="<?php echo get_option('cloudioRating_negative'); ?>"> 
+      <input type="text" size="2" name="crowdioRating_negative" value="<?php echo get_option('crowdioRating_negative'); ?>"> 
    </td>
    </tr>
    <tr>
@@ -144,7 +144,7 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
       Style poorly-rated comments as:
    </td>
    <td>
-       <input type="text" size="50" name="cloudioRating_hide_style" value="<?php echo get_option('cloudioRating_hide_style') ?>">
+       <input type="text" size="50" name="crowdioRating_hide_style" value="<?php echo get_option('crowdioRating_hide_style') ?>">
    </td>
    </tr>
    <tr>
@@ -152,7 +152,7 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
        Words before the images for the poorly-rated:
    </td>
    <td>
-      <input type="text" size="50" name="cloudioRating_words_poor" value="<?php echo get_option('cloudioRating_words_poor'); ?>">
+      <input type="text" size="50" name="crowdioRating_words_poor" value="<?php echo get_option('crowdioRating_words_poor'); ?>">
    </td>
    </tr>
    <tr><td><br/></td> </tr>
@@ -161,8 +161,8 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
       Hotly-debated comments have (Likes + Dislikes) >=
    </td>
    <td>
-      <input type="text" size="2" name="cloudioRating_debated"
-      value="<?php echo get_option('cloudioRating_debated'); ?>"> 
+      <input type="text" size="2" name="crowdioRating_debated"
+      value="<?php echo get_option('crowdioRating_debated'); ?>"> 
    </td>
    </tr>
    <tr>
@@ -170,8 +170,8 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
        Style hotly-debated comments with:
    </td>
    <td>
-      <input type="text" size="50" name="cloudioRating_style_debated"
-      value="<?php echo get_option('cloudioRating_style_debated'); ?>">
+      <input type="text" size="50" name="crowdioRating_style_debated"
+      value="<?php echo get_option('crowdioRating_style_debated'); ?>">
    </td>
    </tr>
    <tr>
@@ -179,7 +179,7 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
        Words before the images for the hotly-debated:
    </td>
    <td>
-      <input type="text" size="50" name="cloudioRating_words_debated" value="<?php echo get_option('cloudioRating_words_debated'); ?>">
+      <input type="text" size="50" name="crowdioRating_words_debated" value="<?php echo get_option('crowdioRating_words_debated'); ?>">
    </td>
    </tr>
    <tr><td><br/></td> </tr>
@@ -188,13 +188,13 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
        Show two vote values, one combined or both:
    </td>
    <td>
-   <select name="cloudioRating_value_display" id="cloudioRating_value_display">
+   <select name="crowdioRating_value_display" id="crowdioRating_value_display">
 <?php
-   if (get_option('cloudioRating_value_display') == 'one')
+   if (get_option('crowdioRating_value_display') == 'one')
       print('<option selected="selected" value="one">One</option>
             <option value="two">Two</option>
             <option value="three">Three</option>');
-   else if (get_option('cloudioRating_value_display') == 'two')
+   else if (get_option('crowdioRating_value_display') == 'two')
       print('<option value="one">One</option>
             <option selected="selected" value="two">Two</option>
             <option value="three">Three</option>');
@@ -211,7 +211,7 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
       Style the Likes number as:
    </td>
    <td>
-       <input type="text" size="50" name="cloudioRating_likes_style" value="<?php echo get_option('cloudioRating_likes_style') ?>">
+       <input type="text" size="50" name="crowdioRating_likes_style" value="<?php echo get_option('crowdioRating_likes_style') ?>">
    </td>
    </tr>
    <tr>
@@ -219,7 +219,7 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
       Style the DisLikes number as:
    </td>
    <td>
-       <input type="text" size="50" name="cloudioRating_dislikes_style" value="<?php echo get_option('cloudioRating_dislikes_style') ?>">
+       <input type="text" size="50" name="crowdioRating_dislikes_style" value="<?php echo get_option('crowdioRating_dislikes_style') ?>">
    </td>
    </tr>
    <tr>
@@ -227,14 +227,14 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
       Select the image style:
    </td>
    <td>
-       <input type="radio" name="cloudioRating_image_index" value="1"
-          <?php if (get_option('cloudioRating_image_index') == 1) echo 'checked';?> >
+       <input type="radio" name="crowdioRating_image_index" value="1"
+          <?php if (get_option('crowdioRating_image_index') == 1) echo 'checked';?> >
        <img src="<?php echo get_bloginfo('wpurl').'/wp-content/plugins/comment-rating/images/1_16_up.png'; ?>" /><img src="<?php echo get_bloginfo('wpurl').'/wp-content/plugins/comment-rating/images/1_16_down.png'; ?>" />
-       <input type="radio" name="cloudioRating_image_index" value="2"
-          <?php if (get_option('cloudioRating_image_index') == 2) echo 'checked';?> >
+       <input type="radio" name="crowdioRating_image_index" value="2"
+          <?php if (get_option('crowdioRating_image_index') == 2) echo 'checked';?> >
        <img src="<?php echo get_bloginfo('wpurl').'/wp-content/plugins/comment-rating/images/2_16_up.png'; ?>" /><img src="<?php echo get_bloginfo('wpurl').'/wp-content/plugins/comment-rating/images/2_16_down.png'; ?>" />
-       <input type="radio" name="cloudioRating_image_index" value="3"
-          <?php if (get_option('cloudioRating_image_index') == 3) echo 'checked';?> >
+       <input type="radio" name="crowdioRating_image_index" value="3"
+          <?php if (get_option('crowdioRating_image_index') == 3) echo 'checked';?> >
        <img src="<?php echo get_bloginfo('wpurl').'/wp-content/plugins/comment-rating/images/3_16_up.png'; ?>" /><img src="<?php echo get_bloginfo('wpurl').'/wp-content/plugins/comment-rating/images/3_16_down.png'; ?>" />
    </td>
    </tr>
@@ -243,10 +243,10 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
       Select the image size (in pixels):
    </td>
    <td>
-      <select name="cloudioRating_image_size" id="cloudioRating_image_size">
-         <option <?php if (get_option('cloudioRating_image_size') == 14) echo 'selected="selected"';?> value="14">14</option>
-         <option <?php if (get_option('cloudioRating_image_size') == 16) echo 'selected="selected"';?> value="16">16</option>
-         <option <?php if (get_option('cloudioRating_image_size') == 20) echo 'selected="selected"';?> value="20">20</option>
+      <select name="crowdioRating_image_size" id="crowdioRating_image_size">
+         <option <?php if (get_option('crowdioRating_image_size') == 14) echo 'selected="selected"';?> value="14">14</option>
+         <option <?php if (get_option('crowdioRating_image_size') == 16) echo 'selected="selected"';?> value="16">16</option>
+         <option <?php if (get_option('crowdioRating_image_size') == 20) echo 'selected="selected"';?> value="20">20</option>
       </select>
    </td>
    </tr>
@@ -257,10 +257,10 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
    </td>
    <td>
       <img src="<?php echo get_bloginfo('wpurl').'/wp-content/plugins/comment-rating/images/3_16_up.png'; ?>" />
-      <input type="text" name="cloudioRating_up_alt_text" value="<?php echo get_option('cloudioRating_up_alt_text'); ?>">
+      <input type="text" name="crowdioRating_up_alt_text" value="<?php echo get_option('crowdioRating_up_alt_text'); ?>">
       <br />
       <img src="<?php echo get_bloginfo('wpurl').'/wp-content/plugins/comment-rating/images/3_16_down.png'; ?>" />
-      <input type="text" name="cloudioRating_down_alt_text" value="<?php echo get_option('cloudioRating_down_alt_text'); ?>">
+      <input type="text" name="crowdioRating_down_alt_text" value="<?php echo get_option('crowdioRating_down_alt_text'); ?>">
    </td>
    </tr>
 <!--End of addition by Eric Peterka, 12-31-2009, ToolTip Text options -->
@@ -273,11 +273,11 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
        Value for comment_karma (Likes, Dislikes or Both):
    </td>
    <td>
-   <select name="cloudioRating_karma_type" id="cloudioRating_karma_type">
-      <option value="likes" <?php if (!(get_option('cloudioRating_karma_type') == 'likes')) print('selected="selected"');?> >Likes Only</option>
-      <option value="dislikes" <?php if (get_option('cloudioRating_karma_type') == 'dislikes') print('selected="selected"');?>>Dislikes Only</option>
-      <option value="both" <?php if ( get_option('cloudioRating_karma_type') !== 'dislikes' &&
-                                      get_option('cloudioRating_karma_type') !== 'likes' )
+   <select name="crowdioRating_karma_type" id="crowdioRating_karma_type">
+      <option value="likes" <?php if (!(get_option('crowdioRating_karma_type') == 'likes')) print('selected="selected"');?> >Likes Only</option>
+      <option value="dislikes" <?php if (get_option('crowdioRating_karma_type') == 'dislikes') print('selected="selected"');?>>Dislikes Only</option>
+      <option value="both" <?php if ( get_option('crowdioRating_karma_type') !== 'dislikes' &&
+                                      get_option('crowdioRating_karma_type') !== 'likes' )
                                  print('selected="selected"');?>>Both</option>
    </select>
    </td>
@@ -287,9 +287,9 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
       Turn off auto-insert into comments:
    </td>
    <td>
-      <select name="cloudioRating_auto_insert" id="cloudioRating_auto_insert">
+      <select name="crowdioRating_auto_insert" id="crowdioRating_auto_insert">
 <?php
-   if (get_option('cloudioRating_auto_insert') == 'yes')
+   if (get_option('crowdioRating_auto_insert') == 'yes')
       print('<option value="no">Yes</option>
             <option selected="selected" value="yes">No</option>');
    else 
@@ -304,9 +304,9 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
       Turn off inline style sheet:
    </td>
    <td>
-      <select name="cloudioRating_inline_style_off" id="cloudioRating_inline_style_off">
-         <option <?php if (get_option('cloudioRating_inline_style_off') == 'yes') echo 'selected="selected"';?> value="yes">Yes</option>
-         <option <?php if (!(get_option('cloudioRating_inline_style_off') == 'yes')) echo 'selected="selected"';?> value="no">No</option>');
+      <select name="crowdioRating_inline_style_off" id="crowdioRating_inline_style_off">
+         <option <?php if (get_option('crowdioRating_inline_style_off') == 'yes') echo 'selected="selected"';?> value="yes">Yes</option>
+         <option <?php if (!(get_option('crowdioRating_inline_style_off') == 'yes')) echo 'selected="selected"';?> value="no">No</option>');
       </select>
    </td>
    </tr>
@@ -315,16 +315,16 @@ License: Copyright 2012 Crowdio.  http://crowdio.com/
       Turn off Javascript loading:
    </td>
    <td>
-      <select name="cloudioRating_javascript_off" id="cloudioRating_javascript_off">
-         <option <?php if (get_option('cloudioRating_javascript_off') == 'yes') echo 'selected="selected"';?> value="yes">Yes</option>
-         <option <?php if (!(get_option('cloudioRating_javascript_off') == 'yes')) echo 'selected="selected"';?> value="no">No</option>');
+      <select name="crowdioRating_javascript_off" id="crowdioRating_javascript_off">
+         <option <?php if (get_option('crowdioRating_javascript_off') == 'yes') echo 'selected="selected"';?> value="yes">Yes</option>
+         <option <?php if (!(get_option('crowdioRating_javascript_off') == 'yes')) echo 'selected="selected"';?> value="no">No</option>');
       </select>
    </td>
    </tr>
    <tr> <td> <br/></td> <td> <br/> </td> </tr>
    <tr>
    <td>
-   <input type="hidden" name="cloudioRating_hidden" value="Y">
+   <input type="hidden" name="crowdioRating_hidden" value="Y">
    <input type="submit" class="button-primary" value="Update options" />
    </td>
    <td>

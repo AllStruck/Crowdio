@@ -22,7 +22,7 @@ function crowdioRatingcreateXMLHttpRequest() {
         xmlhttp = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
     } catch (e) {
         // browser doesn’t support ajax. handle however you want
-        //document.getElementById("errormsg").innerHTML = "Your browser doesnt support XMLHttpRequest.";
+        // document.getElementById("errormsg").innerHTML = "Your browser doesnt support XMLHttpRequest.";
         // This won't help ordinary users.  Turned off
         // alert("Your browser does not support the XMLHttpRequest Object!");
     }

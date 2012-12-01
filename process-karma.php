@@ -34,7 +34,7 @@ $comment_table_name = $wpdb->prefix . 'comments';
 
 if($k_id && $k_action && $k_path) {
     //Check to see if the comment id exists and grab the rating
-    $query = "SELECT * FROM `$table_name` WHERE ck_comment_id = $k_id";
+    $query = "SELECT * FROM `$table_name` WHERE crowdio_comment_id = $k_id";
     $result = mysql_query($query);
 
 	if(!$result) { die('error|mysql: '.mysql_error()); }
@@ -46,26 +46,26 @@ if($k_id && $k_action && $k_path) {
       {
          // Handle proxy with original IP address
          $ip = getenv("HTTP_X_FORWARDED_FOR") ? getenv("HTTP_X_FORWARDED_FOR") : getenv("REMOTE_ADDR");
-         if(strstr($row['ck_ips'], $ip)) {
+         if(strstr($row['crowdio_ips'], $ip)) {
             // die('error|You have already voted on this item!'); 
             // Just don't count duplicated votes
             $duplicated = 1;
-            $ck_ips = $row['ck_ips'];
+            $crowdio_ips = $row['crowdio_ips'];
          }
          else {
-            $ck_ips = $row['ck_ips'] . ',' . $ip; // IPs are separated by ','
+            $crowdio_ips = $row['crowdio_ips'] . ',' . $ip; // IPs are separated by ','
          }
       }
 		
-      $total = $row['ck_rating_up'] - $row['ck_rating_down'];
+      $total = $row['crowdio_comment_rating_up'] - $row['crowdio_comment_rating_down'];
       if($k_action == 'add') {
-         $rating = $row['ck_rating_up'] + 1 - $duplicated;
+         $rating = $row['crowdio_comment_rating_up'] + 1 - $duplicated;
          $direction = 'up';
          $total = $total + 1 - $duplicated;
       }
       elseif($k_action == 'subtract')
       {
-         $rating = $row['ck_rating_down'] + 1 - $duplicated;
+         $rating = $row['crowdio_comment_rating_down'] + 1 - $duplicated;
          $direction = 'down';
          $total = $total - 1 + $duplicated;
       } else {
@@ -74,7 +74,7 @@ if($k_id && $k_action && $k_path) {
 		
       if (!$duplicated)
       {
-         $query = "UPDATE `$table_name` SET ck_rating_$direction = '$rating', ck_ips = '" . $ck_ips  . "' WHERE ck_comment_id = $k_id";
+         $query = "UPDATE `$table_name` SET crowdio_comment_rating_$direction = '$rating', crowdio_ips = '" . $crowdio_ips  . "' WHERE crowdio_comment_id = $k_id";
          $result = mysql_query($query); 
          if(!$result)
          {

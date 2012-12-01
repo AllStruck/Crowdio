@@ -14,7 +14,7 @@ add_action('init', 'crowdio_add_javascript');  // add javascript in the footer
    // caching database query per comment
    $crowdio_cache = array('crowdio_ips'=>"", 'crowdio_comment_id'=>0, 'crowdio_rating_up'=>0, 'crowdio_rating_down'=>0); 
 		
-	$table_name = $table_prefix . "comment_rating";
+	$table_name = $table_prefix . "crowdio_comment_rating";
 	if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name)
 	{
 		crowdio_install();
@@ -66,7 +66,7 @@ function crowdio_show_options_page() {
          // Update comment_karma if the karma_type changes.
          if (get_option('crowdio_karma_type') != $_POST['crowdio_karma_type']) {
             update_option('crowdio_karma_type', $_POST['crowdio_karma_type']);
-            $crowdio_result = mysql_query('SELECT crowdio_comment_id, crowdio_rating_up, crowdio_rating_down FROM ' . $table_prefix . 'comment_rating'); 
+            $crowdio_result = mysql_query('SELECT crowdio_comment_id, crowdio_rating_up, crowdio_rating_down FROM ' . $table_prefix . 'crowdio_comment_rating'); 
             $comment_table_name = $table_prefix . 'comments';
             if(!$crowdio_result) { mysql_error(); }
 
@@ -141,7 +141,7 @@ function crowdio_install() //Install the needed SQl entries.
 {
    global $table_prefix, $wpdb;
 
-   $table_name = $table_prefix . "comment_rating";
+   $table_name = $table_prefix . "crowdio_comment_rating";
 
    $sql = 'DROP TABLE `' . $table_name . '`';  // drop the existing table
    mysql_query($sql);
@@ -156,7 +156,7 @@ function crowdio_install() //Install the needed SQl entries.
    $sql = 'ALTER TABLE `' . $table_name . '` ADD INDEX (`crowdio_comment_id`);';  // add index
    mysql_query($sql);
 
-   echo "comment_rating tables created";
+   echo "crowdio_comment_rating tables created";
        
    $crowdio_result = mysql_query('SELECT comment_ID FROM ' . $table_prefix . 'comments'); //Put all IDs in our new table
    while($crowdio_row = mysql_fetch_array($crowdio_result, MYSQL_ASSOC)) //Wee loop
@@ -169,7 +169,7 @@ function crowdio_comment_posted($crowdio_comment_id) //When comment posted this 
 {
    global $table_prefix, $wpdb;
    $ip = getenv("HTTP_X_FORWARDED_FOR") ? getenv("HTTP_X_FORWARDED_FOR") : getenv("REMOTE_ADDR");
-   $table_name = $table_prefix . "comment_rating";
+   $table_name = $table_prefix . "crowdio_comment_rating";
    mysql_query("INSERT INTO $table_name (crowdio_comment_id, crowdio_ips, crowdio_rating_up, crowdio_rating_down) VALUES ('" . $crowdio_comment_id . "', '" . $ip . "', 0, 0)"); //Adds the new comment ID into our made table, with the users IP
 }
 
@@ -181,7 +181,7 @@ function crowdio_get_rating($comment_id)
    // return it if the value is in the cache
    if ($comment_id == $crowdio_cache['crowdio_comment_id']) return;
 
-   $table_name = $table_prefix . "comment_rating";
+   $table_name = $table_prefix . "crowdio_comment_rating";
    $crowdio_sql = "SELECT crowdio_ips, crowdio_rating_up, crowdio_rating_down FROM `$table_name` WHERE crowdio_comment_id = $comment_id";
    $crowdio_result = mysql_query($crowdio_sql);
    
