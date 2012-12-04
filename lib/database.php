@@ -10,7 +10,6 @@ class CrowdioDatabase extends Crowdio
 		global $wpdb, $table_prefix;
 		$crowdio_vote_table_name = $table_prefix . "_crowdio_vote";
 		$crowdio_comment_table_name = $table_prefix . "_crowdio_comment";
-		
 	}
 
 
