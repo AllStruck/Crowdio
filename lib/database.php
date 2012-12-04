@@ -11,6 +11,37 @@ class CrowdioDatabase extends Crowdio
 		$crowdio_comment_table_name = $table_prefix . "_crowdio_comment";
 	}
 
+	function create_tables() {
+		$vote_table_create_query = "
+			CREATE TABLE $crowdio_vote_table_name (
+				id BIGINT(20) NOT NULL,
+				user_id,
+				user_ip,
+				session_id,
+				vote_direction,
+
+				)
+		"
+		$comment_table_create_query = "
+			CREATE TABLE $crowdio_comment_table_name (
+				id BIGINT(20) NOT NULL, 
+				user_id,
+				user_ip,
+				session_id,
+				comment_text,
+				timestamp)
+			ENGINE = myisam;";
+	}
+
+	   $sql = 'CREATE TABLE `' . $table_name . '` ('
+      . ' `crowdio_comment_id` BIGINT(20) NOT NULL, '
+      . ' `crowdio_ips` BLOB NOT NULL, '
+      . ' `crowdio_rating_up` INT,'
+      . ' `crowdio_rating_down` INT'
+      . ' )'
+      . ' ENGINE = myisam;';
+
+
 	function get_ranked_votes($type)
 	{
 		switch ($type) {
@@ -49,5 +80,3 @@ class CrowdioDatabase extends Crowdio
 		return $wpdb->get_result($ranking_query);
 	}
 }
-
-
