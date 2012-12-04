@@ -1,0 +1,23 @@
+section.crowdio_form
+{
+font-family:"Times New Roman";
+font-size:20px;
+background-color:tan;
+padding: 5px;
+}
+
+div.crowdio_row
+{
+font-family:"Times New Roman";
+font-size:20px;
+background-color:white; 
+border: 1px solid blue;
+  
+}
+
+field
+{
+    float:left;
+    width: 100px;
+    display: block;
+}   

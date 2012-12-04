@@ -7,25 +7,23 @@ class ClassName extends AnotherClass
 	
 	function __construct(argument)
 	{
-		
-<section class="form">
-<form method="post" action="$_SERVER['PHP_SELF']">
- Name: <input type="text" name="name" id="$_POST['name']"> <BR>
-Email: <input type="email" name="email" id="<?php $_POST['email']; ?>"> <BR>
-Company: <input type="text" name="company" id="<?php $_POST['company']; ?>"> <BR>
-Comment: <textarea name="comment" id="<?php $_POST['comment']; ?>"></textarea>
-</form>
-</section>
-
-
+	
 	}
 
-	function draw_comment_form() {
-		$comment_id;
-		print <<<END
+	function draw_comment_form()
+	{
+	print <<<END
 
-
-
+	<section class="crowdio_form">
+        <form method="post" action="$_SERVER['PHP_SELF']">
+            <div class="crowdio_row"> <field>Name:</field>  <input type="text" name="name" id="$_POST['name']">
+                <div class="crowdio_row"> <field> Email: </field><input type="email" name="email" id="$_POST['email']"> </div>
+                <div class="crowdio_row"> <field>Company:</field> <input type="text" name="company" id="$_POST['company']"> </div>
+                <div class="crowdio_row"> <field>Comment: </field><textarea name="comment" id="$_POST['comment']"></textarea> </div>
+                
+                <div class="crowdio_row"> <field>&nbsp;</field> <input type="submit" value="SUBMIT!!" id="submit"></div>
+        </form>
+</section>
 END
 	}
 }
