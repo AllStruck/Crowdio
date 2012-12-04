@@ -40,7 +40,6 @@ class CrowdioDatabase extends Crowdio
 
 	function get_ranked_votes($type)
 	{
-		
 		switch ($type) {	
 			case 'comment':
 				$comment_id = "comment_id";
@@ -51,8 +50,6 @@ class CrowdioDatabase extends Crowdio
 				$comment_id = "comment_id , parent_id";
 				$table = "$crowdio_vote_table_name";
 				break;
-
-
 		}
 
 		$ranking_query = "
