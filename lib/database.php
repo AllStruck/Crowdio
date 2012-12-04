@@ -9,19 +9,22 @@ class CrowdioDatabase extends Crowdio
 		global $wpdb, $table_prefix;
 		$crowdio_vote_table_name = $table_prefix . "_crowdio_vote";
 		$crowdio_comment_table_name = $table_prefix . "_crowdio_comment";
+		
 	}
+
 
 	function create_tables() {
 		$vote_table_create_query = "
-			CREATE TABLE $crowdio_vote_table_name (
+			CREATE TABLE '$crowdio_vote_table_name' (
 				id BIGINT(20) NOT NULL,
 				user_id,
 				user_ip,
 				session_id,
-				vote_direction,
+				possitive,
+				negative,
+				comment_id,
+				parent_id )"
 
-				)
-		"
 		$comment_table_create_query = "
 			CREATE TABLE $crowdio_comment_table_name (
 				id BIGINT(20) NOT NULL, 
@@ -29,36 +32,27 @@ class CrowdioDatabase extends Crowdio
 				user_ip,
 				session_id,
 				comment_text,
+				parent_id,
 				timestamp)
 			ENGINE = myisam;";
 	}
 
-	   $sql = 'CREATE TABLE `' . $table_name . '` ('
-      . ' `crowdio_comment_id` BIGINT(20) NOT NULL, '
-      . ' `crowdio_ips` BLOB NOT NULL, '
-      . ' `crowdio_rating_up` INT,'
-      . ' `crowdio_rating_down` INT'
-      . ' )'
-      . ' ENGINE = myisam;';
-
 
 	function get_ranked_votes($type)
 	{
-		switch ($type) {
-			case 'question':
-				$comment_id = "";
-				$table = "";
-				break;
-			
+		
+		switch ($type) {	
 			case 'comment':
-				$comment_id = "";
-				$table = "";
+				$comment_id = "comment_id";
+				$table = "$crowdio_vote_table_name";
 				break;
 
 			case 'reply':
-				$comment_id = "";
-				$table = "";
+				$comment_id = "comment_id , parent_id";
+				$table = "$crowdio_vote_table_name";
 				break;
+
+
 		}
 
 		$ranking_query = "
@@ -80,3 +74,4 @@ class CrowdioDatabase extends Crowdio
 		return $wpdb->get_result($ranking_query);
 	}
 }
+
