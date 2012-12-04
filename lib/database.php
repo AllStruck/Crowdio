@@ -1,5 +1,6 @@
 <?php
-/**
+/*
+
 */
 class CrowdioDatabase extends Crowdio
 {
@@ -30,6 +31,10 @@ class CrowdioDatabase extends Crowdio
 				id BIGINT(20) NOT NULL, 
 				user_id,
 				user_ip,
+				name,
+				email;
+				website;
+				company;
 				session_id,
 				comment_text,
 				parent_id,
