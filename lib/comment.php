@@ -41,14 +41,16 @@ END
 		
 		// write data to SQL $wpdb->insert( $table, $data, $format );
 		$wpd->insert($crowdio_comment_table_name,
-			array(name => $_POST['name'] ,
+			array(
+				name => $_POST['name'] ,
 				email => $_POST['email'] ,
 				company => $_POST['company'] ,
 			    comment => $_POST['comment'] ,
 			    user_ip => $_SERVER['REMOTE_ADDR'] ,
 			    user_id => wp_get_current_user() ,
 			    website => $_POST['website'] ,
-			    session_id => session_id() ,
+			    session_id => session_id() 
+			    )
 
 			}
 }
