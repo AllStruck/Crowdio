@@ -36,8 +36,7 @@ class CrowdioDatabase extends Crowdio
 				company;
 				session_id,
 				comment_text,
-				parent_id,
-				timestamp)
+				parent_id )
 			ENGINE = myisam;";
 	}
 
