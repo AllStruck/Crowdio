@@ -1,24 +1,38 @@
 <?php
+
+		require_once($lib_path . 'database.php');
+		require_once($lib_path . 'comment.php');
+		require_once($lib_path . 'vote.php');
+
+
 /**
 * @Package Crowdio
 */
 class Crowdio
 {
-	global $wpdb, $table_prefix;
-
-	define('CROWDIO_PLUGIN_PATH', plugin_dir_path(__FILE__));
-	define('CROWDIO_COMMENT_TABLE_NAME', $table_prefix . 'crowdio_comments');
-	define('CROWDIO_VOTE_TABLE_NAME', $table_prefix . 'crowdio_votes');
 
 	public static $plugin_path = CROWDIO_PLUGIN_PATH;
 	public static $comment_table_name = CROWDIO_COMMENT_TABLE_NAME;
 	public static $vote_table_name = CROWDIO_VOTE_TABLE_NAME;
 
-	function __construct(argument)
+	public function __construct()
 	{
+		global $wpdb, $table_prefix;
+
+		define('CROWDIO_PLUGIN_PATH', plugin_dir_path(__FILE__));
+		define('CROWDIO_COMMENT_TABLE_NAME', $table_prefix . 'crowdio_comments');
+		define('CROWDIO_VOTE_TABLE_NAME', $table_prefix . 'crowdio_votes');
+		
 		add_action( 'init', array( $this, 'add_rfi_post_type' ) );
+		
+		$lib_path = $plugin_path . 'lib/';		
 	}
 
+
+	public function add_actions() {
+
+	}
+	
 	public function add_form_css() {
 		wp_register_style('cloudio_form_css');
 		wp_register_style('cloudio_form_css', $plugin_path . 'style/form.css');
@@ -60,9 +74,15 @@ class Crowdio
 		remove_post_type_support( 'crowsdios', 'comments' );
 	}
 }
+// Plugin initialization:
 
 // Classes:
+$crowdio_main = new Crowdio();
 $crowdio_db = new CrowdioDatabase();
+
+// Custom post type:
+$crowdio_main->add_actions();
+
 
 // Plugin installation:
 // Create new tables if they do not exist:
@@ -70,3 +90,4 @@ if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
 	$crowdio_db->create_tables();
 }
 
+echo "test";
