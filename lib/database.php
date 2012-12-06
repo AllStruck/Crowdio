@@ -23,7 +23,7 @@ class CrowdioDatabase extends Crowdio
 				possitive,
 				negative,
 				comment_id,
-				parent_id )"
+				parent_id )";
 
 		$comment_table_create_query = "
 			CREATE TABLE $crowdio_comment_table_name (

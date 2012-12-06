@@ -89,5 +89,3 @@ $crowdio_main->add_actions();
 if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
 	$crowdio_db->create_tables();
 }
-
-echo "test";

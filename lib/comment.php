@@ -11,36 +11,45 @@ IF isset($_POST['submit'])
  >goto submit
 	else >goto form
 */
+<<<<<<< HEAD
 class Crowdio_Comments extends Crowdio
+=======
+class CrowdioComments extends Crowdio
+>>>>>>> Getting code to run, fixing misc "bugs".
 {
 	
-	function __construct(argument)
+	function __construct()
 	{
 	
 	}
 
 	function draw_comment_form()
 	{
+	$action_url = htmlentities($_SERVER['PHP_SELF']);
+	$user_email = $_POST['email'];
+	$user_company = $_POST['company'];
+	$user_website = $_POST['user_website'];
+	$user_comment = $_POST['comment'];
+	
 	print <<<END
-
-	<section class="crowdio_form">
-        <form method="post" action="htmlentities($_SERVER['PHP_SELF'])">
-            <div class="crowdio_row"> <field>Name: </field> <input type="text" name="name" id="$_POST['name']">
-                <div class="crowdio_row"> <field>Email: </field><input type="email" name="email" id="$_POST['email']"> </div>
-                <div class="crowdio_row"> <field>Company: </field> <input type="text" name="company" id="$_POST['company']"> </div>
-                <div class="crowdio_row"> <field>Website: </field> <input type="text" name="website" id="$_POST['website']"> </div>
-                <div class="crowdio_row"> <field>Comment: </field><textarea name="comment" id="$_POST['comment']"></textarea> </div>
-                <div class="crowdio_row"> <field>&nbsp; </field> <input type="submit" value="SUBMIT!!" id="submit"></div>
-        </form>
-</section>
-END
+		<section class="crowdio_form">
+		    <form method="post" action="$action_url">
+		        <div class="crowdio_row"> <field>Name: </field> <input type="text" name="name" id="$user_email">
+		            <div class="crowdio_row"> <field>Email: </field><input type="email" name="email" id="$user_email"> </div>
+		            <div class="crowdio_row"> <field>Company: </field> <input type="text" name="company" id="$user_company"> </div>
+		            <div class="crowdio_row"> <field>Website: </field> <input type="text" name="website" id="$user_website"> </div>
+		            <div class="crowdio_row"> <field>Comment: </field><textarea name="comment" id="$user_comment"></textarea> </div>
+		            <div class="crowdio_row"> <field>&nbsp; </field> <input type="submit" value="SUBMIT!!" id="submit"></div>
+		    </form>
+		</section>
+END;
 	}
 
 	function crowdio_add_comment()
 	{
 		
 		// write data to SQL $wpdb->insert( $table, $data, $format );
-		$wpd->insert($crowdio_comment_table_name,
+		$wpdb->insert($crowdio_comment_table_name,
 			array(
 				name => $_POST['name'] ,
 				email => $_POST['email'] ,
@@ -50,9 +59,10 @@ END
 			    user_id => wp_get_current_user() ,
 			    website => $_POST['website'] ,
 			    session_id => session_id() 
-			    )
+			    ));
 
 	}
+<<<<<<< HEAD
 
 	function crowdio_view_comments($per_page)
 	{
@@ -63,6 +73,8 @@ END
 
 END
 	}
+=======
+>>>>>>> Getting code to run, fixing misc "bugs".
 }
 
 

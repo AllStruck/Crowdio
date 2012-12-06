@@ -5,7 +5,7 @@
 class CrowdioVote extends Crowdio
 {
 	
-	function __construct(argument)
+	function __construct()
 	{
 		# code...
 	}
