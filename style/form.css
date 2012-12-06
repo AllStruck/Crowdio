@@ -3,11 +3,12 @@ Crowdio CSS Form
 V 1.0
 */
 
+
 section.crowdio_form
 {
 font-family:"Times New Roman";
 font-size:20px;
-background-color:tan;
+background-color:LightSteelBlue;
 padding: 5px;
 }
 
@@ -15,8 +16,8 @@ div.crowdio_row
 {
 font-family:"Times New Roman";
 font-size:20px;
-background-color:white; 
-border: 1px solid blue;
+background-color:Azure; 
+border: 1px solid cornflowerblue;
   
 }
 

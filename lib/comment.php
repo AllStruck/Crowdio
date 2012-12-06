@@ -59,13 +59,7 @@ END;
 			);
 
 	}
-/*
-function getnfo2() {
-global $wpdb;
-$sponsors = $wpdb->get_row("SELECT sponsors FROM $wpdb->sponsors, ARRAY_A");
-echo $sponsors;
-}
-*/
+
 
 	function crowdio_view_comments($per_page)
 	{

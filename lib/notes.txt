@@ -48,3 +48,11 @@ echo "<p>Total miles is {$allmiles}</p>";
 ?> 
 
 ==============================================================================================
+function getnfo2() 
+{
+global $wpdb;
+$sponsors = $wpdb->get_row("SELECT sponsors FROM $wpdb->sponsors, ARRAY_A");
+echo $sponsors;
+}
+
+==============================================================================================
