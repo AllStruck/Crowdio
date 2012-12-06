@@ -74,13 +74,14 @@ echo $sponsors;
 		// print comments 
 		foreach ($result as $row) 
 		{
-		<section class="form">
-			<field> &nbsp; </field> 	<div> $row->date </div>
+	    echo "
+		<section class=\"form\">
+			<field> &nbsp; </feild> 	<div> $row->date</div>
 			<field> Name </field> 		<div> $row->name</div>
 			<field> Email </field> 		<div> $row->email</div>
 			<field> Comment </field>	<div> $row->comment</div>
-
 		</section>
+		";
 		}		
 
 	}

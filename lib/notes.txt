@@ -1,2 +1,50 @@
 NOTES
--------------------------------------------------------
+----------------------------------------------------------------------------------------
+
+
+<?php
+
+global $wpdb;
+/* wpdb class should not be called directly.global $wpdb variable is an instantiation of the class already set up to talk to the WordPress database */ 
+
+$result = $wpdb->get_results( "SELECT * FROM it_testtable "); /*mulitple row results can be pulled from the database with get_results function and outputs an object which is stored in $result */
+
+//echo "<pre>"; print_r($result); echo "</pre>";
+/* If you require you may print and view the contents of $result object */
+
+echo "ID"."  "."Name"."<br><br>";
+foreach($result as $row)
+ {
+
+ echo $row->id."  ".$row->name."<br>";
+
+ }
+ /* Print the contents of $result looping through each row returned in the result */
+
+?>
+
+=============================================================================================
+http://codex.wordpress.org/Class_Reference/wpdb
+---------------------------------------------------------------------------------------------
+<?php
+$user_count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->users;" ) );
+echo "<p>User count is {$user_count}</p>";
+?>
+
+-------------------------------
+
+<?php
+// set the meta_key to the appropriate custom field meta key
+$meta_key = 'miles';
+$allmiles = $wpdb->get_var( $wpdb->prepare( 
+	"
+		SELECT sum(meta_value) 
+		FROM $wpdb->postmeta 
+		WHERE meta_key = %s
+	", 
+	$meta_key
+) );
+echo "<p>Total miles is {$allmiles}</p>";
+?> 
+
+==============================================================================================
