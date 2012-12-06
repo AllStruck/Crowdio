@@ -6,10 +6,14 @@ Version 1.0
 */
 
 /*
-IF isset($_POST['submit'])
- >check no empty values (name,email,comment)
- >goto submit
-	else >goto form
+Notes
+--------
+IF isset($_POST['submit']) && values not empty(name,email,comment)
+       > then submit
+ELSE  >goto form again
+
+** Later on need to add only user can submit once
+	
 */
 {
 	
