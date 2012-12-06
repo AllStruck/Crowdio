@@ -11,11 +11,6 @@ IF isset($_POST['submit'])
  >goto submit
 	else >goto form
 */
-<<<<<<< HEAD
-class Crowdio_Comments extends Crowdio
-=======
-class CrowdioComments extends Crowdio
->>>>>>> Getting code to run, fixing misc "bugs".
 {
 	
 	function __construct()
@@ -62,8 +57,6 @@ END;
 			    ));
 
 	}
-<<<<<<< HEAD
-
 	function crowdio_view_comments($per_page)
 	{
 		// read database comment
@@ -73,8 +66,6 @@ END;
 
 END
 	}
-=======
->>>>>>> Getting code to run, fixing misc "bugs".
 }
 
 
