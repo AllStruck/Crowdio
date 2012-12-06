@@ -11,7 +11,7 @@ IF isset($_POST['submit'])
  >goto submit
 	else >goto form
 */
-class Crowdio_Comments extends AnotherClass
+class Crowdio_Comments extends Crowdio
 {
 	
 	function __construct(argument)
@@ -52,7 +52,17 @@ END
 			    session_id => session_id() 
 			    )
 
-			}
+	}
+
+	function crowdio_view_comments($per_page)
+	{
+		// read database comment
+
+		// print comments 
+		print <<<END 
+
+END
+	}
 }
 
 
