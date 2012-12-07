@@ -3,6 +3,8 @@
 /* 
 Crowdio Comment Function
 Version 1.0
+
+- Dommert & Monaghan
 */
 
 /*
@@ -14,7 +16,9 @@ ELSE  >goto form again
 
 ** Later on need to add only user can submit once
 	
+	also need to start reply section
 */
+
 {
 	
 	function __construct()
@@ -34,12 +38,13 @@ ELSE  >goto form again
 	print <<<END
 		<section class="crowdio_form">
 		    <form method="post" action="$action_url">
-		        <div class="crowdio_row"> <field>Name: </field> <input type="text" name="name" id="$user_name">
-		        <div class="crowdio_row"> <field>Email: </field><input type="email" name="email" id="$user_email"> </div>
-		        <div class="crowdio_row"> <field>Company: </field> <input type="text" name="company" id="$user_company"> </div>
-		        <div class="crowdio_row"> <field>Website: </field> <input type="text" name="website" id="$user_website"> </div>
-		        <div class="crowdio_row"> <field>Comment: </field><textarea name="comment" id="$user_comment"></textarea> </div>
-		        <div class="crowdio_row"> <field>&nbsp; </field> <input type="submit" value="SUBMIT!!" id="submit"></div>
+		    <div class="crowdio_row"> <center><u>COMMENTS</u></center> </div>
+	        <div class="crowdio_row"> <field>Name: </field> <input type="text" name="name" id="$user_name">
+	        <div class="crowdio_row"> <field>Email: </field><input type="email" name="email" id="$user_email"> </div>
+	        <div class="crowdio_row"> <field>Company: </field> <input type="text" name="company" id="$user_company"> </div>
+	        <div class="crowdio_row"> <field>Website: </field> <input type="text" name="website" id="$user_website"> </div>
+	        <div class="crowdio_row"> <field>Comment: </field><textarea name="comment" id="$user_comment"></textarea> </div>
+	        <div class="crowdio_row"> <field>&nbsp; </field> <input type="submit" value="SUBMIT!!" id="submit"></div>
 		    </form>
 		</section>
 END;
@@ -65,10 +70,10 @@ END;
 	}
 
 
-	function crowdio_view_comments($per_page)
+	function crowdio_view_comments()
 	{
 		// read database comment $wpdb->query('query'); ORDER BY / LIMIT
-		$result = $wpdb->query('SELECT * FROM table')
+		$result = $wpdb->query('SELECT * FROM table');
 		// print comments 
 		foreach ($result as $row) 
 		{
