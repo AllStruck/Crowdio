@@ -56,3 +56,9 @@ echo $sponsors;
 }
 
 ==============================================================================================
+
+Rounded Corners IE 6, 7,8 (must download border-radius.htc)
+.rounded-corners {
+    behavior: url(/css/border-radius.htc);
+    border-radius: 20px;
+}
