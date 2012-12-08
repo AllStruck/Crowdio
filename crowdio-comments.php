@@ -8,5 +8,7 @@ Version: 1.0
 Author URI: http://crowdio.com/
 */
 
+define('CROWDIO_MAIN_PLUGIN_FILE', __FILE__);
+
 include( plugin_dir_path(__FILE__) . 'lib/setup.php');
 

@@ -1,7 +1,7 @@
 <?php
 
 		require_once($lib_path . 'database.php');
-		require_once($lib_path . 'comment.php');
+		//require_once($lib_path . 'comment.php');
 		require_once($lib_path . 'vote.php');
 
 
@@ -11,7 +11,8 @@
 class Crowdio
 {
 
-	public static $plugin_path = CROWDIO_PLUGIN_PATH;
+	public static $plugin_path = CROWDIO_PLUGIN_DIR_PATH;
+	public static $plugin_dir_url = CROWDIO_PLUGIN_DIR_URL;
 	public static $comment_table_name = CROWDIO_COMMENT_TABLE_NAME;
 	public static $vote_table_name = CROWDIO_VOTE_TABLE_NAME;
 
@@ -19,7 +20,8 @@ class Crowdio
 	{
 		global $wpdb, $table_prefix;
 
-		define('CROWDIO_PLUGIN_PATH', plugin_dir_path(__FILE__));
+		define('CROWDIO_PLUGIN_DIR_PATH', plugin_dir_path(CROWDIO_MAIN_PLUGIN_FILE));
+		define('CROWDIO_PLUGIN_DIR_URL', plugin_dir_url(CROWDIO_MAIN_PLUGIN_FILE));
 		define('CROWDIO_COMMENT_TABLE_NAME', $table_prefix . 'crowdio_comments');
 		define('CROWDIO_VOTE_TABLE_NAME', $table_prefix . 'crowdio_votes');
 	
@@ -69,7 +71,7 @@ class Crowdio
 			'hierarchical' => false,
 			'menu_position' => null,
 			'supports' => array( 'title', 'author', 'avatar'),
-			'menu_icon' => plugins_url( 'Checkmark.png', __FILE__ )
+			'menu_icon' => CROWDIO_PLUGIN_DIR_URL . 'image/Checkmark.png'
 		);
 		register_post_type('crowdios', $args);
 		remove_post_type_support( 'crowsdios', 'comments' );
