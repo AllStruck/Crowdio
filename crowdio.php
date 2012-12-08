@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Crowdio Comments
+Plugin Name: Crowdio
 Plugin URI: http://crowdio.com/
 Description: Get your idea vetted with this WordPress comment engine.
 Author: Crowdio <team@crowdio.com>

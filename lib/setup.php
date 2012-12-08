@@ -10,7 +10,6 @@
 */
 class Crowdio
 {
-
 	public static $plugin_path = CROWDIO_PLUGIN_DIR_PATH;
 	public static $plugin_dir_url = CROWDIO_PLUGIN_DIR_URL;
 	public static $comment_table_name = CROWDIO_COMMENT_TABLE_NAME;
@@ -74,7 +73,7 @@ class Crowdio
 			'menu_icon' => CROWDIO_PLUGIN_DIR_URL . 'image/Checkmark.png'
 		);
 		register_post_type('crowdios', $args);
-		remove_post_type_support( 'crowsdios', 'comments' );
+		remove_post_type_support( 'crowdios', 'comments' );
 	}
 }
 // Plugin initialization:
@@ -89,6 +88,7 @@ $crowdio_main->add_actions();
 
 // Plugin installation:
 // Create new tables if they do not exist:
-if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
+if(($wpdb->get_var("SHOW TABLES LIKE '$comment_table_name'") != $comment_table_name) ||
+	$wpdb->get_var("SHOW TABLES LIKE '$vote_table_name'") != $vote_table_name) {
 	$crowdio_db->create_tables();
 }
