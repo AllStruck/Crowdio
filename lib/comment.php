@@ -23,13 +23,13 @@ class CrowdioComment extends Crowdio {
 	print <<<END
 		<section class="crowdio_form">
 		    <form method="post" action="$action_url">
+		    	<input type="hidden" name="crowdio_id" value="$rfi_id" />
+		    	
 			    <div class="crowdio_row"> <span id="crowdio_comment_form">COMMENTS</span> </div>
 			    
 			    <fieldset>
 			    	<legend>Personalia:</legend>
 					Name: <input type="text"><br>
-					Email: <input type="text"><br>
-					Date of birth: <input type="text">
 	    		</fieldset>
 	
 		        <div class="crowdio_row"> <field>Name: </field> <input type="text" name="name" id="$user_name"> </div>
