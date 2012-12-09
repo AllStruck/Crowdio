@@ -1,32 +1,17 @@
 <?php
 
-/* 
-Crowdio Comment Function
-Version 1.0
-
-- Dommert & Monaghan
+/**
+* @Package:	Crowdio
 */
 
-/*
-Notes
---------
-IF isset($_POST['submit']) && values not empty(name,email,comment)
-       > then submit
-ELSE  >goto form again
-
-** Later on need to add only user can submit once
-	
-	also need to start reply section
-*/
-
-{
+class CrowdioComment extends Crowdio {
 	
 	function __construct()
 	{
-	
+		global $wpdb;
 	}
 
-	function draw_comment_form()
+	function display_comment_form()
 	{
 	$action_url = htmlentities($_SERVER['PHP_SELF']);
 	$user_name = $_POST['name'];
@@ -70,7 +55,7 @@ END;
 	}
 
 
-	function crowdio_view_comments()
+	function display_comments()
 	{
 		// read database comment $wpdb->query('query'); ORDER BY / LIMIT
 		$result = $wpdb->query('SELECT * FROM table');

@@ -1,19 +1,11 @@
 <?php
 
-		require_once($lib_path . 'database.php');
-		//require_once($lib_path . 'comment.php');
-		require_once($lib_path . 'vote.php');
-
 
 /**
 * @Package Crowdio
 */
 class Crowdio
 {
-	public static $plugin_path = CROWDIO_PLUGIN_DIR_PATH;
-	public static $plugin_dir_url = CROWDIO_PLUGIN_DIR_URL;
-	public static $comment_table_name = CROWDIO_COMMENT_TABLE_NAME;
-	public static $vote_table_name = CROWDIO_VOTE_TABLE_NAME;
 
 	public function __construct()
 	{
@@ -22,20 +14,26 @@ class Crowdio
 		define('CROWDIO_PLUGIN_DIR_PATH', plugin_dir_path(CROWDIO_MAIN_PLUGIN_FILE));
 		define('CROWDIO_PLUGIN_DIR_URL', plugin_dir_url(CROWDIO_MAIN_PLUGIN_FILE));
 		define('CROWDIO_COMMENT_TABLE_NAME', $table_prefix . 'crowdio_comments');
-		define('CROWDIO_VOTE_TABLE_NAME', $table_prefix . 'crowdio_votes');
+		define('CROWDIO_VOTE_TABLE_NAME', $table_prefix . 'crowdio_votes ');
 	
 			add_action( 'init', array( $this, 'add_rfi_post_type' ) );
 		
-		$lib_path = $plugin_path . 'lib/';		
+		$plugin_path = CROWDIO_PLUGIN_DIR_PATH;
+		$plugin_dir_url = CROWDIO_PLUGIN_DIR_URL;
+		$comment_table_name = CROWDIO_COMMENT_TABLE_NAME;
+		$vote_table_name = CROWDIO_VOTE_TABLE_NAME;
+		
+		$lib_path = $plugin_path . 'lib/';
+		require_once($lib_path . 'database.php');
+		require_once($lib_path . 'comment.php');
+		require_once($lib_path . 'vote.php');
+
+		$crowdio_db = new CrowdioDatabase();
+		register_activation_hook(__FILE__, $crowdio_db->create_tables());
 	}
 
-
-	public function add_actions() 
-	{
-
-	}
 	
-	 function add_form_css() {
+	function add_form_css() {
 		wp_register_style('cloudio_form_css');
 		wp_register_style('cloudio_form_css', $plugin_path . 'style/form.css');
 		wp_enqueue_style('cloudio_form_css');
@@ -76,19 +74,5 @@ class Crowdio
 		remove_post_type_support( 'crowdios', 'comments' );
 	}
 }
-// Plugin initialization:
 
-// Classes:
 $crowdio_main = new Crowdio();
-$crowdio_db = new CrowdioDatabase();
-
-// Custom post type:
-$crowdio_main->add_actions();
-
-
-// Plugin installation:
-// Create new tables if they do not exist:
-if(($wpdb->get_var("SHOW TABLES LIKE '$comment_table_name'") != $comment_table_name) ||
-	$wpdb->get_var("SHOW TABLES LIKE '$vote_table_name'") != $vote_table_name) {
-	$crowdio_db->create_tables();
-}
