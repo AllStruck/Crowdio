@@ -16,7 +16,7 @@ class Crowdio
 		define('CROWDIO_COMMENT_TABLE_NAME', $table_prefix . 'crowdio_comments');
 		define('CROWDIO_VOTE_TABLE_NAME', $table_prefix . 'crowdio_votes ');
 	
-			add_action( 'init', array( $this, 'add_rfi_post_type' ) );
+		add_action( 'init', array( $this, 'add_rfi_post_type' ) );
 		
 		$plugin_path = CROWDIO_PLUGIN_DIR_PATH;
 		$plugin_dir_url = CROWDIO_PLUGIN_DIR_URL;
@@ -30,12 +30,17 @@ class Crowdio
 
 		$crowdio_db = new CrowdioDatabase();
 		register_activation_hook(__FILE__, $crowdio_db->create_tables());
+		
+		$crowdio_comment = new CrowdioComment();
+		add_filter('the_content', array($crowdio_comment, 'modify_page_content'));
+		
+		add_action('init', array($this, 'add_form_css'));
 	}
 
 	
 	function add_form_css() {
-		wp_register_style('cloudio_form_css');
-		wp_register_style('cloudio_form_css', $plugin_path . 'style/form.css');
+		wp_deregister_style('cloudio_form_css');
+		wp_register_style('cloudio_form_css', CROWDIO_PLUGIN_DIR_URL . 'style/form.css');
 		wp_enqueue_style('cloudio_form_css');
 	}
 

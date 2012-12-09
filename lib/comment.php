@@ -13,7 +13,7 @@ class CrowdioComment extends Crowdio {
 
 	function display_comment_form()
 	{
-	$action_url = htmlentities($_SERVER['PHP_SELF']);
+	$action_url = $GLOBALS['post']->guid;
 	$user_name = $_POST['name'];
 	$user_email = $_POST['email'];
 	$user_company = $_POST['company'];
@@ -23,13 +23,21 @@ class CrowdioComment extends Crowdio {
 	print <<<END
 		<section class="crowdio_form">
 		    <form method="post" action="$action_url">
-		    <div class="crowdio_row"> <center><u>COMMENTS</u></center> </div>
-	        <div class="crowdio_row"> <field>Name: </field> <input type="text" name="name" id="$user_name">
-	        <div class="crowdio_row"> <field>Email: </field><input type="email" name="email" id="$user_email"> </div>
-	        <div class="crowdio_row"> <field>Company: </field> <input type="text" name="company" id="$user_company"> </div>
-	        <div class="crowdio_row"> <field>Website: </field> <input type="text" name="website" id="$user_website"> </div>
-	        <div class="crowdio_row"> <field>Comment: </field><textarea name="comment" id="$user_comment"></textarea> </div>
-	        <div class="crowdio_row"> <field>&nbsp; </field> <input type="submit" value="SUBMIT!!" id="submit"></div>
+			    <div class="crowdio_row"> <span id="crowdio_comment_form">COMMENTS</span> </div>
+			    
+			    <fieldset>
+			    	<legend>Personalia:</legend>
+					Name: <input type="text"><br>
+					Email: <input type="text"><br>
+					Date of birth: <input type="text">
+	    		</fieldset>
+	
+		        <div class="crowdio_row"> <field>Name: </field> <input type="text" name="name" id="$user_name"> </div>
+		        <div class="crowdio_row"> <field>Email: </field><input type="email" name="email" id="$user_email"> </div>
+		        <div class="crowdio_row"> <field>Company: </field> <input type="text" name="company" id="$user_company"> </div>
+		        <div class="crowdio_row"> <field>Website: </field> <input type="text" name="website" id="$user_website"> </div>
+		        <div class="crowdio_row"> <field>Comment: </field><textarea name="comment" id="$user_comment"></textarea> </div>
+		        <div class="crowdio_row"> <field>&nbsp; </field> <input type="submit" value="SUBMIT!!" id="submit"></div>
 		    </form>
 		</section>
 END;
@@ -41,14 +49,14 @@ END;
 		// write data to SQL $wpdb->insert( $table, $data, $format );
 		$wpdb->insert($crowdio_comment_table_name,
 			array(
-				name => $_POST['name'] ,
-				email => $_POST['email'] ,
-				company => $_POST['company'] ,
-			    comment => $_POST['comment'] ,
-			    user_ip => $_SERVER['REMOTE_ADDR'] ,
-			    user_id => wp_get_current_user() ,
-			    website => $_POST['website'] ,
-			    session_id => session_id() 
+				name => $_POST['name'],
+				email => $_POST['email'],
+				company => $_POST['company'],
+			    comment => $_POST['comment'],
+			    user_ip => $_SERVER['REMOTE_ADDR'],
+			    user_id => wp_get_current_user(),
+			    website => $_POST['website'],
+			    session_id => session_id()
 			    )
 			);
 
@@ -70,8 +78,18 @@ END;
 			<field> Comment </field>	<div> $row->comment</div>
 		</section>
 		";
-		}		
-
+		}
+	}
+	
+	public function modify_page_content($content)
+	{
+		if (is_single() && $GLOBALS['post']->post_type == 'crowdios')
+		{
+			//$content .= $this->display_comments();
+			$content .= $this->display_comment_form();
+		}
+				
+		return $content;
 	}
 }
 
