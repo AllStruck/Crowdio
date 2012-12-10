@@ -32,7 +32,7 @@ class Crowdio
 		register_activation_hook(__FILE__, $crowdio_db->create_tables());
 		
 		$crowdio_comment = new CrowdioComment();
-		add_filter('the_content', array($crowdio_comment, 'modify_page_content'));
+		add_filter('comments_template', array($crowdio_comment, 'modify_page_content'));
 		
 		add_action('init', array($this, 'add_form_css'));
 	}
