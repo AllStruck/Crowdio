@@ -1,7 +1,8 @@
 <?php
 
-/**
+/*
 * @Package:	Crowdio
+*
 */
 
 class CrowdioComment extends Crowdio {
@@ -19,36 +20,23 @@ class CrowdioComment extends Crowdio {
 		$user_company = $_POST['company'];
 		$user_website = $_POST['user_website'];
 		$user_comment = $_POST['comment'];
+		$rfi_id = $GLOBALS['post']->post_id;
+		
 		
 		print <<<END
 			<section class="crowdio_form">
 			    <form method="post" action="$action_url">
 			    	<input type="hidden" name="crowdio_id" value="$rfi_id" />
 			    	
-				    <div class="crowdio_row">
-				    	<span id="crowdio_comment_form">Add your best idea (one per person):</span>
-				    </div>
+				    <div class="crowdio_row"> <span id="crowdio_comment_form">Add your best idea (one per person):</span> </div>
 				    
-				    <fieldset>
-						<label for="crowdio_comment_name">Name:</label> <input type="text" id="crowdio_comment_name" />
-		    		</fieldset>
-				    <fieldset>
-						<label for="crowdio_comment_email">Email:</label> <input type="text" id="crowdio_comment_email" />
-		    		</fieldset>
-				    <fieldset>
-						<label for="crowdio_comment_organization">Organization:</label> <input type="text" id="crowdio_comment_organization" />
-		    		</fieldset>
-				    <fieldset>
-						<label for="crowdio_comment_website">Website:</label> <input type="text" id="crowdio_comment_website" />
-		    		</fieldset>
-				    <fieldset>
-						<label for="crowdio_comment_content">Comment:</label>
-						<textarea rows="4" cols="20" id="crowdio_comment_content"></textarea>
-		    		</fieldset>
+				    <fieldset> <label for="crowdio_comment_name">Name:</label> <input type="text" id="crowdio_comment_name" /> </fieldset>
+				    <fieldset> <label for="crowdio_comment_email">Email:</label> <input type="text" id="crowdio_comment_email" /> </fieldset>
+				    <fieldset> <label for="crowdio_comment_organization">Organization:</label> <input type="text" id="crowdio_comment_organization" /> </fieldset>
+				    <fieldset> <label for="crowdio_comment_website">Website:</label> <input type="text" id="crowdio_comment_website" /> </fieldset>
+				    <fieldset> <label for="crowdio_comment_content">Comment:</label> <textarea rows="4" cols="20" id="crowdio_comment_content"></textarea> </fieldset>
 		
-			        <div class="crowdio_row">
-			        	<input type="submit" value="Submit" id="submit" />
-			        </div>
+			        <div class="crowdio_row"> <input type="submit" value="Submit" id="submit" /> </div>
 			    </form>
 			</section>
 END;
@@ -66,8 +54,9 @@ END;
 			    comment => $_POST['comment'],
 			    user_ip => $_SERVER['REMOTE_ADDR'],
 			    user_id => wp_get_current_user(),
-			    website => $_POST['website'],
-			    session_id => session_id()
+			    website => $_POST['website'], 
+			    session_id => session_id(),
+			    rfi_id => $_POST['crowdio_id']
 			    )
 			);
 
