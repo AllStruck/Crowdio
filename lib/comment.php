@@ -20,8 +20,8 @@ class CrowdioComment extends Crowdio {
 		$user_company = $_POST['company'];
 		$user_website = $_POST['user_website'];
 		$user_comment = $_POST['comment'];
-		$rfi_id = $GLOBALS['post']->post_id;
-		
+		$rfi_id = $GLOBALS['post']->ID;
+
 		
 		print <<<END
 			<section class="crowdio_form">
@@ -77,8 +77,8 @@ END;
 			<field> Email </field> 		<div> $row->email</div>
 			<field> Comment </field>	<div> $row->comment</div>
 		</section>
-		";
-		}
+		"
+;		}
 	}
 	
 	public function modify_page_content($content)
