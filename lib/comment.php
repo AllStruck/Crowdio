@@ -30,13 +30,13 @@ class CrowdioComment extends Crowdio {
 			    	
 				    <div class="crowdio_row"> <span id="crowdio_comment_form">Add your best idea (one per person):</span> </div>
 				    
-				    <fieldset> <label for="crowdio_comment_name">Name:</label> <input type="text" id="crowdio_comment_name" /> </fieldset>
-				    <fieldset> <label for="crowdio_comment_email">Email:</label> <input type="text" id="crowdio_comment_email" /> </fieldset>
-				    <fieldset> <label for="crowdio_comment_organization">Organization:</label> <input type="text" id="crowdio_comment_organization" /> </fieldset>
-				    <fieldset> <label for="crowdio_comment_website">Website:</label> <input type="text" id="crowdio_comment_website" /> </fieldset>
-				    <fieldset> <label for="crowdio_comment_content">Comment:</label> <textarea rows="4" cols="20" id="crowdio_comment_content"></textarea> </fieldset>
+				    <fieldset> <label for="crowdio_comment_name">Name:</label> <input type="text" id="crowdio_comment_name" value="$user_name" /> </fieldset>
+				    <fieldset> <label for="crowdio_comment_email">Email:</label> <input type="text" id="crowdio_comment_email" value="$user_email" /> </fieldset>
+				    <fieldset> <label for="crowdio_comment_organization">Organization:</label> <input type="text" id="crowdio_comment_organization" value="$user_company" /> </fieldset>
+				    <fieldset> <label for="crowdio_comment_website">Website:</label> <input type="text" id="crowdio_comment_website" value="$user_website" /> </fieldset>
+				    <fieldset> <label for="crowdio_comment_content">Comment:</label> <textarea rows="4" cols="20" id="crowdio_comment_content" value="$user_comment"></textarea> </fieldset>
 		
-			        <div class="crowdio_row"> <input type="submit" value="Submit" id="submit" /> </div>
+			        <div class="crowdio_row"> <input type="submit" value="SUBMIT" id="submit" /> </div>
 			    </form>
 			</section>
 END;
