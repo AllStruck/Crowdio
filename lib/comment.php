@@ -25,18 +25,30 @@ class CrowdioComment extends Crowdio {
 			    <form method="post" action="$action_url">
 			    	<input type="hidden" name="crowdio_id" value="$rfi_id" />
 			    	
-				    <div class="crowdio_row"> <span id="crowdio_comment_form">COMMENTS</span> </div>
+				    <div class="crowdio_row">
+				    	<span id="crowdio_comment_form">Add your best idea (one per person):</span>
+				    </div>
 				    
 				    <fieldset>
-						<label for="crowdio_name">Name:</label> <input type="text" id="crowdio_name" />
+						<label for="crowdio_comment_name">Name:</label> <input type="text" id="crowdio_comment_name" />
+		    		</fieldset>
+				    <fieldset>
+						<label for="crowdio_comment_email">Email:</label> <input type="text" id="crowdio_comment_email" />
+		    		</fieldset>
+				    <fieldset>
+						<label for="crowdio_comment_organization">Organization:</label> <input type="text" id="crowdio_comment_organization" />
+		    		</fieldset>
+				    <fieldset>
+						<label for="crowdio_comment_website">Website:</label> <input type="text" id="crowdio_comment_website" />
+		    		</fieldset>
+				    <fieldset>
+						<label for="crowdio_comment_content">Comment:</label>
+						<textarea rows="4" cols="20" id="crowdio_comment_content"></textarea>
 		    		</fieldset>
 		
-			        <div class="crowdio_row"> <field>Name: </field> <input type="text" name="name" id="$user_name"> </div>
-			        <div class="crowdio_row"> <field>Email: </field><input type="email" name="email" id="$user_email"> </div>
-			        <div class="crowdio_row"> <field>Company: </field> <input type="text" name="company" id="$user_company"> </div>
-			        <div class="crowdio_row"> <field>Website: </field> <input type="text" name="website" id="$user_website"> </div>
-			        <div class="crowdio_row"> <field>Comment: </field><textarea name="comment" id="$user_comment"></textarea> </div>
-			        <div class="crowdio_row"> <field>&nbsp; </field> <input type="submit" value="Submit" id="submit"></div>
+			        <div class="crowdio_row">
+			        	<input type="submit" value="Submit" id="submit" />
+			        </div>
 			    </form>
 			</section>
 END;

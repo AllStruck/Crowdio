@@ -7,30 +7,22 @@ V 1.0
 
 section.crowdio_form
 {
-font-family:"Times New Roman";
-font-size:20px;
-background-color:LightSteelBlue;
-border: 1px solid cornflowerblue;
-padding: 5px;
-margin: 2px;
-border-radius: 20px;  
--moz-border-radius: 20px;
--webkit-border-radius: 20px;
--khtml-border-radius: 20px;
-
+	font-family:"Times New Roman";
+	font-size:20px;
+	background-color:LightSteelBlue;
+	border: 1px solid cornflowerblue;
+	padding: 5px;
+	margin: 2px;
+	border-radius: 20px; -moz-border-radius: 20px; -webkit-border-radius: 20px; -khtml-border-radius: 20px;
 }
 
 div.crowdio_row
 {
-font-family:"Times New Roman";
-font-size:20px;
-background-color:Azure;
-/* border: 1px solid cornflowerblue; */
-    border-radius: 10px;  
--moz-border-radius: 10px;
--webkit-border-radius: 10px;
--khtml-border-radius: 10px;
-  
+	font-family:"Times New Roman";
+	font-size:20px;
+	background-color:Azure;
+	/* border: 1px solid cornflowerblue; */
+	border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; -khtml-border-radius: 10px;
 }
 
 field
@@ -39,5 +31,4 @@ field
     width: 100px;
     display: block;
     text-align: right;
-
 }   
