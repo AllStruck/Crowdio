@@ -27,7 +27,8 @@ class CrowdioDatabase extends Crowdio
 				company VARCHAR(250),
 				session_id VARCHAR(250),
 				comment_text TEXT,
-				parent_id BIGINT(20) )
+				parent_id BIGINT(20),
+				rfi_id BIGINT(20) )
 			ENGINE = myisam DEFAULT CHARACTER SET = utf8;";
 		
 		$vote_table_create_query = "
