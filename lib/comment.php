@@ -29,7 +29,7 @@ class CrowdioComment extends Crowdio {
 			    
 			    <fieldset>
 			    	<legend>Personalia:</legend>
-					Name: <input type="text"><br>
+					<label for="crowdio_name">Name:</label> <input type="text" id="crowdio_name" />
 	    		</fieldset>
 	
 		        <div class="crowdio_row"> <field>Name: </field> <input type="text" name="name" id="$user_name"> </div>
