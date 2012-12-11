@@ -18,7 +18,8 @@ class CrowdioDatabase extends Crowdio
 		
 		$comment_table_create_query = "
 			CREATE TABLE IF NOT EXISTS $crowdio_comment_table_name (
-				id BIGINT(20) NOT NULL,
+				id BIGINT(20) NOT NULL AUTO_INCREMENT,
+				created_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 				user_id BIGINT(20),
 				user_ip VARCHAR(100),
 				name VARCHAR(250),
@@ -28,7 +29,9 @@ class CrowdioDatabase extends Crowdio
 				session_id VARCHAR(250),
 				comment_text TEXT,
 				parent_id BIGINT(20),
-				rfi_id BIGINT(20) )
+				rfi_id BIGINT(20),
+				PRIMARY KEY (id)
+				)
 			ENGINE = myisam DEFAULT CHARACTER SET = utf8;";
 		
 		$vote_table_create_query = "

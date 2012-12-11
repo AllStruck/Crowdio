@@ -21,14 +21,14 @@ class CrowdioComment extends Crowdio {
 		$user_website = $_POST['crowdio_comment_website'];
 		$user_comment = $_POST['crowdio_comment_content'];
 		$rfi_id = $GLOBALS['post']->ID;
-
+		
 		
 		print <<<END
 			<section class="crowdio_form">
 			    <form method="post" action="$action_url">
 			    	<input type="hidden" name="crowdio_rfi_id" value="$rfi_id" />
 			    	
-				    <div class="crowdio_row"> <span id="crowdio_comment_form">Add your best idea (one per person):</span> </div>
+				    <div class="crowdio_row"> <span id="crowdio_comment_form"> Add your best idea (one per person):</span> </div>
 				    
 				    <fieldset> <label for="crowdio_comment_name">Name:</label> <input type="text" id="crowdio_comment_name" value="$user_name" name="crowdio_comment_name" /> </fieldset>
 				    <fieldset> <label for="crowdio_comment_email">Email:</label> <input type="text" id="crowdio_comment_email" value="$user_email" name="crowdio_comment_email" /> </fieldset>
@@ -58,7 +58,8 @@ END;
 			     
 			    'website' => $_POST['crowdio_comment_website'], 
 			    'session_id' => $sid,
-			    'rfi_id' => $_POST['crowdio_rfi_id']
+			    'rfi_id' => $_POST['crowdio_rfi_id'],
+
 			    )
 			);
 		print "*";
