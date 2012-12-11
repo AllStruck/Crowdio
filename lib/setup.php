@@ -1,6 +1,5 @@
 <?php
 
-
 /**
 * @Package Crowdio
 */
@@ -33,6 +32,10 @@ class Crowdio
 		
 		$crowdio_comment = new CrowdioComment();
 		add_filter('comments_template', array($crowdio_comment, 'modify_page_content'));
+
+		if (isset($_POST['submit'])) {
+			$crowdio_comment->check_submission();
+		}
 		
 		add_action('init', array($this, 'add_form_css'));
 	}

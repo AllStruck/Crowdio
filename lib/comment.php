@@ -15,11 +15,11 @@ class CrowdioComment extends Crowdio {
 	function display_comment_form()
 	{
 		$action_url = $GLOBALS['post']->guid;
-		$user_name = $_POST['name'];
-		$user_email = $_POST['email'];
-		$user_company = $_POST['company'];
-		$user_website = $_POST['user_website'];
-		$user_comment = $_POST['comment'];
+		$user_name = $_POST['crowdio_comment_name'];
+		$user_email = $_POST['crowdio_comment_email'];
+		$user_company = $_POST['crowdio_comment_organization'];
+		$user_website = $_POST['crowdio_comment_website'];
+		$user_comment = $_POST['crowdio_comment_content'];
 		$rfi_id = $GLOBALS['post']->ID;
 
 		
@@ -42,7 +42,7 @@ class CrowdioComment extends Crowdio {
 END;
 	}
 
-	function crowdio_add_comment()
+	function add_comment()
 	{
 		
 		// write data to SQL $wpdb->insert( $table, $data, $format );
@@ -70,15 +70,28 @@ END;
 		// print comments 
 		foreach ($result as $row) 
 		{
-	    echo "
-		<section class=\"form\">
-			<field> &nbsp; </feild> 	<div> $row->date</div>
-			<field> Name </field> 		<div> $row->name</div>
-			<field> Email </field> 		<div> $row->email</div>
-			<field> Comment </field>	<div> $row->comment</div>
-		</section>
-		"
-;		}
+		    echo <<<END
+			<section class="form">
+				<field> &nbsp; </feild> 	<div> $row->date</div>
+				<field> Name </field> 		<div> $row->name</div>
+				<field> Email </field> 		<div> $row->email</div>
+				<field> Comment </field>	<div> $row->comment</div>
+			</section>
+END;
+		}
+	}
+
+	public function check_submission() {
+		if (!empty($_POST['crowdio_comment_name']) &&
+		!empty($_POST['crowdio_comment_email']) &&
+		!empty($_POST['crowdio_comment_id']) &&
+		!empty($_POST['crowdio_comment_organization']) &&
+		!empty($_POST['crowdio_comment_website']) &&
+		!empty($_POST['crowdio_comment_content'])) {
+			$self->add_comment();
+		} else {
+			print("Error saving comment");
+		}
 	}
 	
 	public function modify_page_content($content)
@@ -92,9 +105,3 @@ END;
 		return $content;
 	}
 }
-
-
-
-
-
-
