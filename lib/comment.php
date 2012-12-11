@@ -59,6 +59,7 @@ END;
 			    rfi_id => $_POST['crowdio_id']
 			    )
 			);
+		print "Idea submitted, go F yourself. :P";
 
 	}
 
@@ -88,7 +89,7 @@ END;
 		!empty($_POST['crowdio_comment_organization']) &&
 		!empty($_POST['crowdio_comment_website']) &&
 		!empty($_POST['crowdio_comment_content'])) {
-			$self->add_comment();
+			$this->add_comment();
 		} else {
 			print("Error saving comment");
 		}
