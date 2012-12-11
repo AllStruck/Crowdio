@@ -24,8 +24,8 @@ class CrowdioDatabase extends Crowdio
 				user_ip VARCHAR(100),
 				name VARCHAR(250),
 				email VARCHAR(100),
-				website VARCHAR(100),
-				company VARCHAR(250),
+				user_url VARCHAR(100),
+				organization VARCHAR(250),
 				session_id VARCHAR(250),
 				comment_text TEXT,
 				parent_id BIGINT(20),
@@ -50,6 +50,30 @@ class CrowdioDatabase extends Crowdio
 		$wpdb->query($vote_table_create_query);
 	}
 
+	function insert_comment($name, 
+							$email, 
+							$comment_text, 
+							$user_ip, 
+							$user_ID, 
+							$user_url, 
+							$session_id, 
+							$rfi_id,
+							$parent_id) {
+		// write data to SQL $wpdb->insert( $table, $data, $format );
+		$wpdb->insert(CROWDIO_COMMENT_TABLE_NAME,
+			array(
+				'name' => $name,
+				'email' => $email,
+			    'comment_text' => $comment_text,
+			    'user_ip' => $user_ip,
+			    'user_id' => $user_ID,
+			    'user_url' => $user_url,
+			    'session_id' => $session_id,
+			    'rfi_id' => $rfi_id,
+			    'parent_id' => $parent_id
+			    )
+			);
+	}
 
 	function get_ranked_votes($type)
 	{

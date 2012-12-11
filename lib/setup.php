@@ -34,8 +34,8 @@ class Crowdio
 		$crowdio_comment = new CrowdioComment();
 		add_filter('comments_template', array($crowdio_comment, 'modify_page_content'));
 
-		if (!empty($_POST['submit'])) {
-			$crowdio_comment->check_submission();
+		if (!empty($_POST['submit']) && $_POST['crowdio_comment_submit'] == "verify") {
+			add_action('init', array($crowdio_comment, 'check_comment_submission'));
 		}
 		
 		add_action('init', array($this, 'add_form_css'));
