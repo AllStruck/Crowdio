@@ -31,4 +31,12 @@ field
     width: 100px;
     display: block;
     text-align: right;
-}   
+}  
+
+label
+{
+    float:left;
+    width: 100px;
+    display: block;
+    text-align: right;	
+}
