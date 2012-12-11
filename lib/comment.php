@@ -26,7 +26,7 @@ class CrowdioComment extends Crowdio {
 		print <<<END
 			<section class="crowdio_form">
 			    <form method="post" action="$action_url">
-			    	<input type="hidden" name="crowdio_id" value="$rfi_id" />
+			    	<input type="hidden" name="crowdio_rfi_id" value="$rfi_id" />
 			    	
 				    <div class="crowdio_row"> <span id="crowdio_comment_form">Add your best idea (one per person):</span> </div>
 				    
@@ -34,7 +34,7 @@ class CrowdioComment extends Crowdio {
 				    <fieldset> <label for="crowdio_comment_email">Email:</label> <input type="text" id="crowdio_comment_email" value="$user_email" name="crowdio_comment_email" /> </fieldset>
 				    <fieldset> <label for="crowdio_comment_organization">Organization:</label> <input type="text" id="crowdio_comment_organization" name="crowdio_comment_organization" value="$user_company" /> </fieldset>
 				    <fieldset> <label for="crowdio_comment_website">Website:</label> <input type="text" id="crowdio_comment_website" name="crowdio_comment_website" value="$user_website" /> </fieldset>
-				    <fieldset> <label for="crowdio_comment_content">Comment:</label> <textarea rows="4" cols="20" id="crowdio_comment_content" name="crowdio_comment_content" value="$user_comment"></textarea> </fieldset>
+				    <fieldset> <label for="crowdio_comment_content">Comment:</label> <textarea rows="4" cols="20" id="crowdio_comment_content" name="crowdio_comment_content">$user_comment</textarea> </fieldset>
 		
 			        <div class="crowdio_row"> <input type="submit" value="SUBMIT" id="submit" name="submit"  /> </div>
 			    </form>
@@ -44,19 +44,21 @@ END;
 
 	function add_comment()
 	{
-		
+		global $wpdb;
+		$sid = session_id();
+		//wp_get_current_user();user_id => $current_user->ID,
 		// write data to SQL $wpdb->insert( $table, $data, $format );
-		$wpdb->insert($crowdio_comment_table_name,
+		$wpdb->insert(CROWDIO_COMMENT_TABLE_NAME,
 			array(
-				name => $_POST['name'],
-				email => $_POST['email'],
-				company => $_POST['company'],
-			    comment => $_POST['comment'],
-			    user_ip => $_SERVER['REMOTE_ADDR'],
-			    user_id => wp_get_current_user(),
-			    website => $_POST['website'], 
-			    session_id => session_id(),
-			    rfi_id => $_POST['crowdio_id']
+				'name' => $_POST['crowdio_comment_name'],
+				'email' => $_POST['crowdio_comment_email'],
+				'company' => $_POST['crowdio_comment_organization'],
+			    'comment_text' => $_POST['crowdio_comment_content'],
+			    'user_ip' => $_SERVER['REMOTE_ADDR'],
+			     
+			    'website' => $_POST['crowdio_comment_website'], 
+			    'session_id' => $sid,
+			    'rfi_id' => $_POST['crowdio_rfi_id']
 			    )
 			);
 		print "Idea submitted, go F yourself. :P";
@@ -85,7 +87,7 @@ END;
 	public function check_submission() {
 		if (!empty($_POST['crowdio_comment_name']) &&
 		!empty($_POST['crowdio_comment_email']) &&
-		!empty($_POST['crowdio_comment_id']) &&
+		!empty($_POST['crowdio_rfi_id']) &&
 		!empty($_POST['crowdio_comment_organization']) &&
 		!empty($_POST['crowdio_comment_website']) &&
 		!empty($_POST['crowdio_comment_content'])) {

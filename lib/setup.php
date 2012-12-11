@@ -9,7 +9,6 @@ class Crowdio
 	public function __construct()
 	{
 		global $wpdb, $table_prefix;
-
 		define('CROWDIO_PLUGIN_DIR_PATH', plugin_dir_path(CROWDIO_MAIN_PLUGIN_FILE));
 		define('CROWDIO_PLUGIN_DIR_URL', plugin_dir_url(CROWDIO_MAIN_PLUGIN_FILE));
 		define('CROWDIO_COMMENT_TABLE_NAME', $table_prefix . 'crowdio_comments');
@@ -35,9 +34,8 @@ class Crowdio
 
 		if (!empty($_POST['submit'])) {
 			$crowdio_comment->check_submission();
-			print "Checking submission.";
 		}
-		print "poop dick";
+		
 		add_action('init', array($this, 'add_form_css'));
 	}
 
