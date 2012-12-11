@@ -4,6 +4,9 @@ V 1.0
 
 */
 
+.single-crowdios #comments {
+	display:none;
+}
 
 section.crowdio_form
 {

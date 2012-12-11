@@ -65,22 +65,50 @@ END;
 
 	}
 
+	function display_comment($comment_row, $levelclass) {
+		$date = $comment_row->date;
+		$name = $comment_row->name;
+		$email = $comment_row->email;
+		$comment = $comment_row->comment_text;
+	    print <<<END
+			<div class="answer $levelclass">
+				<div>Date: $date</div>
+				<div>Name: $name</div>
+				<div>Email: $email</div>
+				<div>Comment: $comment</div>
+			</div>
+END;
+	}
 
 	function display_comments()
 	{
+		global $wpdb;
 		// read database comment $wpdb->query('query'); ORDER BY / LIMIT
-		$result = $wpdb->query('SELECT * FROM table');
+		$comment_table = CROWDIO_COMMENT_TABLE_NAME;
+		$rfi_id = $GLOBALS['post']->ID;
+		$firstlevel = $wpdb->get_results("SELECT * FROM $comment_table WHERE rfi_id = '$rfi_id'");
 		// print comments 
-		foreach ($result as $row) 
+		foreach ($firstlevel as $row) 
 		{
-		    echo <<<END
-			<section class="form">
-				<field> &nbsp; </feild> 	<div> $row->date</div>
-				<field> Name </field> 		<div> $row->name</div>
-				<field> Email </field> 		<div> $row->email</div>
-				<field> Comment </field>	<div> $row->comment</div>
-			</section>
-END;
+			$this->display_comment($row, "firstlevel");
+
+			$secondlevel = $wpdb->get_results("SELECT * FROM $comment_table WHERE rfi_id = '$rfi_id' AND parent_id = '$row->ID'");
+			if ($wpdb->num_rows > 0)
+			{
+				foreach ($secondlevel as $row)
+				{
+					$this->display_comment($row, "secondlevel");
+
+					$thirdlevel = $wpdb->get_results("SELECT * FROM $comment_table WHERE rfi_id = '$rfi_id' AND parent_id = '$row->ID'");
+					if ($wpdb->num_rows > 0)
+					{
+						foreach ($thirdlevel as $row)
+						{
+							$this->display_comment($row, "thirdlevel");
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -101,7 +129,7 @@ END;
 	{
 		if (is_single() && $GLOBALS['post']->post_type == 'crowdios')
 		{
-			//$content .= $this->display_comments();
+			$content .= $this->display_comments();
 			$content .= $this->display_comment_form();
 		}
 				
