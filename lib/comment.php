@@ -61,7 +61,7 @@ END;
 			    'rfi_id' => $_POST['crowdio_rfi_id']
 			    )
 			);
-		print "Idea submitted, go F yourself. :P";
+		print "*";
 
 	}
 
