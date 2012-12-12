@@ -174,24 +174,21 @@ END;
 			$url = $commentUser->user_url;
 			$comment = $comment_row->comment_text;
 			$comment_id = $comment_row->ID;
-			$vote_url = $_SERVER['PATH_INFO'];
-			$crowdio_vote_up = "$vote_url?crowdio_vote=up&comment_id=$comment_id";
-			$crowdio_vote_down = "$vote_url?crowdio_vote=down&comment_id=$comment_id";
 
+			// Url of current page (without any GET vars):
+			$current_page_url = $_SERVER['PATH_INFO'];
+			
+			// Vote URL:
+			$crowdio_vote_up_url = "$current_page_url?crowdio_vote=up&comment_id=$comment_id";
+			$crowdio_vote_down_url = "$current_page_url?crowdio_vote=down&comment_id=$comment_id";
 
-			$reply_link_url = $_SERVER['REQUEST_URI'];
-			if (strpos($reply_link_url, '?') > -1)
-			{
-				$reply_link_url = explode('?', $reply_link_url);
- 				$reply_link_url = '' . $reply_link_url[0] . "?replyto=$comment_id#replyform";
-			} else {
-				$reply_link_url = '' . $reply_link_url . "?replyto=$comment_id#replyform";
-			}
+			// Reply link URL:
+			$reply_link_url = $current_page_url . "?replyto=$comment_id#replyform";
 		    print <<<END
 				<div class="idea">
 					<div class="ideaVoteReplyButtons">
-						<span class="ideaVoteButton up"><a href="$crowdio_vote_up">&#8743;</a> </span>
-						<span class="ideaVoteButton down"><a href="$crowdio_vote_down">&#8744;</a> </span>
+						<span class="ideaVoteButton up"><a href="$crowdio_vote_up_url">&#8743;</a> </span>
+						<span class="ideaVoteButton down"><a href="$crowdio_vote_down_url">&#8744;</a> </span>
 						<span class="ideaReplyButton"><a href="$reply_link_url">Reply</a></span>
 					</div>
 					<div class="ideaInfo">
