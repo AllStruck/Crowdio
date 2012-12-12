@@ -9,4 +9,11 @@ class CrowdioVote extends Crowdio
 	{
 		
 	}
+
+	function check_vote_submission()
+	{
+		global $wpdb;
+
+		
+	}
 }
