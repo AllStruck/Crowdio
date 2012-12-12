@@ -174,6 +174,10 @@ END;
 			$url = $commentUser->user_url;
 			$comment = $comment_row->comment_text;
 			$comment_id = $comment_row->ID;
+			$crowdio_vote_up = "crowdio_vote=up";
+			$crowdio_vote_down = "crowdio_vote=down";
+
+
 			$reply_link_url = $_SERVER['REQUEST_URI'];
 			if (strpos($reply_link_url, '?') > -1)
 			{
@@ -185,8 +189,8 @@ END;
 		    print <<<END
 				<div class="idea">
 					<div class="ideaVoteReplyButtons">
-						<span class="ideaVoteButton up"><a href="">&#8743;</a> </span>
-						<span class="ideaVoteButton down"><a href="">&#8744;</a> </span>
+						<span class="ideaVoteButton up"><a href="$reply_link_url?$crowdio_vote_up?comment_id=$comment_id">&#8743;</a> </span>
+						<span class="ideaVoteButton down"><a href="$reply_link_url?$crowdio_vote_down?comment_id=$comment_id">&#8744;</a> </span>
 						<span class="ideaReplyButton"><a href="$reply_link_url">Reply</a></span>
 					</div>
 					<div class="ideaInfo">
