@@ -9,52 +9,75 @@ class CrowdioComment extends Crowdio {
 	
 	function __construct()
 	{
-		global $wpdb;
+		$GLOBALS['crowdio_comment_blank_fields'] = array();
 	}
 
 	function display_comment_form()
-	{
+	{	// Show the form to submit a new idea, or a reply to an existing idea.
 		global $current_user, $wpdb;
 		get_currentuserinfo();
 		$user_url = $current_user->user_url;
 		$display_name = $current_user->display_name;
 		$user_email = $current_user->user_email;
-		$user_ID = $current_user->ID;
+		$user_id = $current_user->ID;
 
-		$action_url = $_SERVER["REQUEST_URI"]; //$GLOBALS['post']->guid;
+		$action_url = $_SERVER["REQUEST_URI"];
 		$user_comment = $_POST['crowdio_comment_content'];
 		$rfi_id = $GLOBALS['post']->ID;
 
-		$existingComment = $wpdb->get_row("SELECT * FROM " . CROWDIO_COMMENT_TABLE_NAME . " WHERE user_id = $user_ID");
+		// Check for an existing top level comment (idea) submitted by this user on this RFI.
+		$existingComment = $wpdb->get_row("SELECT * FROM " . CROWDIO_COMMENT_TABLE_NAME . " WHERE user_id = $user_id");
 		
 		if (is_user_logged_in())
-		{
-			if (empty($existingComment) || !empty($_GET['replyto']))
-			{
-				$errors = $GLOBALS['crowdio_comment_submit_error'];
-					print <<<END
-						<div class="crowdio_form_error">
-							<span class="error">$errors</span>
-						</div>
-END;
+		{	// Only show the form to logged in users.
 
+			if (!empty($_GET['replyto']))
+			{	// If user clicked reply link, set the parent and check to make sure there is an existing comment that matches:
+				$commentParent = $_GET['replyto'];
+				$commentParentExistsCheck = $wpdb->get_row("SELECT * FROM " . CROWDIO_COMMENT_TABLE_NAME . " WHERE ID = '" . $_GET['replyto'] . "'");
+			} else
+			{	// User is not currently replying, so make sure parent is not set.
+				$commentParent = NULL;
+			}
+
+			if (empty($existingComment) || !empty($_GET['replyto']))
+			{ 	// If there is already a matching comment (idea) from this user,
+				// OR if the use clicked on reply.
+
+				if (!empty($_GET['replyto']) && (empty($commentParentExistsCheck)))
+				{	// Trying to reply to nonexistent comment.
+					// Wipe 'replyto' and ignore it.
+					$_GET['replyto'] = NULL;
+					unset($commentParent);
+				}
+				// Grab error text for display below.
+				$errors = $GLOBALS['crowdio_comment_submit_error'];
+				// Show the error(s).
+				print <<<END
+					<div class="crowdio_form_error">
+						<span class="error">$errors</span>
+					</div>
+END;
+				
+				// Set up the message about which URL will be used on ideas.
 				$addCommentInstructionWebsite = !empty($user_url) ? 
 					"Your website address on your profile is $user_url" : 
 					'Your website address is blank on your profile.';
+				// Append to this URL message how to change the URL on their profile.
 				$addCommentInstructionWebsite .= ' You can <a href="/wp-admin/profile.php">edit your profile</a> at any time.';
 
+				// Set up prompt text depending on if this is a reply or a top level idea.
 				$replyOrIdeaPrompt = empty($_GET['replyto']) ?
 					'Write your idea here:' :
-					'Write your reply here';
+					'Write your reply here:';
 
-				$commentParent = !empty($_GET['replyto']) ?
-					$_GET['replyto'] :
-					'';
-
+				// Add a special class to the comment form field if it was blank.
 				$commentContentClass = in_array('crowdio_comment_content', $GLOBALS['crowdio_comment_blank_fields']) ? 
 					"submittedBlank" :
 					"";
 
+
+				// Finally we can show the form:
 				print <<<END
 					<a name="replyform">&nbsp</a>
 					<div class="crowdio_form">
@@ -63,7 +86,7 @@ END;
 					    	<input type="hidden" name="crowdio_comment_name" value="$display_name" />
 					    	<input type="hidden" name="crowdio_comment_email" value="$user_email" />
 					    	<input type="hidden" name="crowdio_comment_url" value="$user_url" />
-					    	<input type="hidden" name="crowdio_comment_user_id" value="$user_ID" />
+					    	<input type="hidden" name="crowdio_comment_user_id" value="$user_id" />
 					    	<input type="hidden" name="crowdio_comment_parent_id" value="$commentParent" />
 					    	<input type="hidden" name="crowdio_comment_submit" value="verify" />
 
@@ -82,7 +105,7 @@ END;
 					    </form>
 					</div>
 END;
-			} else // User has already submitted an idea.
+			} else // User has already submitted an idea, so do not display main idea form.
 			{
 				print <<<END
 					<div class="crowdioFormNotice">
@@ -90,7 +113,7 @@ END;
 					</div>
 END;
 			}
-		} else
+		} else // User is not logged in, so do not display any form.
 		{
 			print <<<END
 				<div class="crowdioFormNotice">
@@ -111,40 +134,23 @@ END;
 			$email = $_POST['crowdio_comment_email'];
 			$comment_text = $_POST['crowdio_comment_content'];
 			$user_ip = $_SERVER['REMOTE_ADDR'];
-			$user_ID = $_POST['crowdio_comment_user_ID'];
+			$user_id = $_POST['crowdio_comment_user_id'];
 			$user_url = $_SERVER['crowdio_comment_user_url'];
 			$session_id = session_id();
 			$rfi_id = $_POST['crowdio_rfi_id'];
-			//$crowdio_db->insert_comment($name, $email, $comment_text, $user_ip, $user_id, $user_url, $session_id, $rfi_id, $parent_id);
+			$crowdio_db = new CrowdioDatabase();
+			$parent_id = $_POST['crowdio_comment_parent_id'];
 			
-			// write data to SQL $wpdb->insert( $table, $data, $format );
-			$wpdb->insert(CROWDIO_COMMENT_TABLE_NAME,
-				array(
-					'name' => $_POST['crowdio_comment_name'],
-					'email' => $_POST['crowdio_comment_email'],
-					//'organization' => $_POST['crowdio_comment_organization'],
-				    'comment_text' => $_POST['crowdio_comment_content'],
-				    'user_ip' => $_SERVER['REMOTE_ADDR'],
-				    'user_id' => $_POST['crowdio_comment_user_id'],
-				    'website' => $_POST['crowdio_comment_url'],
-				    'session_id' => $sid,
-				    'rfi_id' => $_POST['crowdio_rfi_id'],
-				    'parent_id' => $_POST['crowdio_comment_parent_id']
-				    )
-				);
+			$result = $crowdio_db->insert_comment($name, $email, $comment_text, $user_ip, $user_id, $user_url, $session_id, $rfi_id, $parent_id);
+			if ($result) {
+				unset($_POST);
+			}
 		} else {
 			print("Can't save comment, user not logged in.");
 		}
-		if ($wpdb->insert_id)
-		{
-			print "Success!";
-		} else
-		{
-			print "SQL Insert Error: "; $wpdb->print_error();
-		}
 	}
 
-	function display_comment($comment_row, $levelclass, $comment_id)
+	function display_comment($comment_row, $levelclass)
 	{
 		global $wpdb;
 		$commentUser = get_userdata($comment_row->user_id);
@@ -155,7 +161,7 @@ END;
 			$name = $commentUser->display_name;
 			$url = $commentUser->user_url;
 			$comment = $comment_row->comment_text;
-			$comment_id = $comment_row->id;
+			$comment_id = $comment_row->ID;
 			$action_url = $_SERVER["REQUEST_URI"] . "/?replyto=$comment_id#replyform";
 		    print <<<END
 				<div class="idea">
@@ -182,7 +188,7 @@ END;
 		// read database comment $wpdb->query('query'); ORDER BY / LIMIT
 		$comment_table = CROWDIO_COMMENT_TABLE_NAME;
 		$rfi_id = $GLOBALS['post']->ID;
-		$firstlevel = $wpdb->get_results("SELECT * FROM $comment_table WHERE rfi_id='$rfi_id' AND parent_id IS NULL");
+		$firstlevel = $wpdb->get_results("SELECT * FROM $comment_table WHERE rfi_id='$rfi_id' AND (parent_id IS NULL OR parent_id = '0')");
 		
 		if ($firstlevel)
 		{
@@ -193,7 +199,7 @@ END;
 			{
 				$this->display_comment($row, "firstlevel");
 
-				$secondlevel = $wpdb->get_results("SELECT * FROM $comment_table WHERE rfi_id = '$rfi_id' AND parent_id = '$row->id'");
+				$secondlevel = $wpdb->get_results("SELECT * FROM $comment_table WHERE rfi_id = '$rfi_id' AND parent_id = '$row->ID'");
 				if ($secondlevel)
 				{
 					print '<div class="crowdioComment secondlevel">';
@@ -201,7 +207,7 @@ END;
 					{
 						$this->display_comment($row, "secondlevel");
 
-						$thirdlevel = $wpdb->get_results("SELECT * FROM $comment_table WHERE rfi_id = '$rfi_id' AND parent_id = '$row->id'");
+						$thirdlevel = $wpdb->get_results("SELECT * FROM $comment_table WHERE rfi_id = '$rfi_id' AND parent_id = '$row->ID'");
 						if ($thirdlevel)
 						{
 							print '<div class="crowdioComment thirdlevel">';
