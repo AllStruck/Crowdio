@@ -254,7 +254,7 @@ END;
 		!empty($_POST['crowdio_comment_name']) &&
 		!empty($_POST['crowdio_comment_email']) &&
 		!empty($_POST['crowdio_rfi_id']) &&
-		!empty($_POST['crowdio_comment_url']) &&
+		//!empty($_POST['crowdio_comment_url']) &&
 		!empty($_POST['crowdio_comment_content']))
 		{	// Looks good, let's start adding the new comment.
 			$this->add_comment();
