@@ -26,7 +26,7 @@ class CrowdioComment extends Crowdio {
 		$rfi_id = $GLOBALS['post']->ID;
 
 		// Check for an existing top level comment (idea) submitted by this user on this RFI.
-		$existingComment = $wpdb->get_row("SELECT * FROM " . CROWDIO_COMMENT_TABLE_NAME . " WHERE user_id = $user_id");
+		$existingComment = $wpdb->get_row("SELECT * FROM " . CROWDIO_COMMENT_TABLE_NAME . " WHERE user_id = $user_id AND rfi_id = '$rfi_id'");
 		
 		if (is_user_logged_in())
 		{	// Only show the form to logged in users.
@@ -174,13 +174,20 @@ END;
 			$url = $commentUser->user_url;
 			$comment = $comment_row->comment_text;
 			$comment_id = $comment_row->ID;
-			$action_url = $_SERVER["REQUEST_URI"] . "/?replyto=$comment_id#replyform";
+			$reply_link_url = $_SERVER['REQUEST_URI'];
+			if (strpos($reply_link_url, '?') > -1)
+			{
+				$reply_link_url = explode('?', $reply_link_url);
+ 				$reply_link_url = '' . $reply_link_url[0] . "?replyto=$comment_id#replyform";
+			} else {
+				$reply_link_url = '' . $reply_link_url . "?replyto=$comment_id#replyform";
+			}
 		    print <<<END
 				<div class="idea">
 					<div class="ideaVoteReplyButtons">
 						<span class="ideaVoteButton up"><a href="">+</a> </span>
 						<span class="ideaVoteButton down"><a href="">-</a> </span>
-						<span class="ideaReplyButton"><a href="$action_url">Reply</a></span>
+						<span class="ideaReplyButton"><a href="$reply_link_url">Reply</a></span>
 					</div>
 					<div class="ideaInfo">
 						<span class="ideaDate">$created</span>:
