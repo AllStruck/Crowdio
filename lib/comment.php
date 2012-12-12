@@ -185,8 +185,8 @@ END;
 		    print <<<END
 				<div class="idea">
 					<div class="ideaVoteReplyButtons">
-						<span class="ideaVoteButton up"><a href="">+</a> </span>
-						<span class="ideaVoteButton down"><a href="">-</a> </span>
+						<span class="ideaVoteButton up"><a href="">&#8743;</a> </span>
+						<span class="ideaVoteButton down"><a href="">&#8744;</a> </span>
 						<span class="ideaReplyButton"><a href="$reply_link_url">Reply</a></span>
 					</div>
 					<div class="ideaInfo">
