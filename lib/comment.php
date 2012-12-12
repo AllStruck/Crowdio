@@ -76,7 +76,6 @@ END;
 					"submittedBlank" :
 					"";
 
-
 				// Finally we can show the form:
 				print <<<END
 					<a name="replyform">&nbsp</a>
@@ -159,7 +158,7 @@ END;
 		}
 	}
 
-	function display_comment($comment_row, $levelclass)
+	function display_comment($comment_row, $levelclass, $score="")
 	{	// Display one comment, this is called from display_comments() multiple times, 
 		// $comment_row is an object containing all of the data for just one comment, 
 		// and $levelclass is a string setting the class name indicating how deep this 
@@ -172,23 +171,31 @@ END;
 			$created = $comment_row->created_timestamp;
 			$name = $commentUser->display_name;
 			$url = $commentUser->user_url;
-			$comment = $comment_row->comment_text;
+			$comment = stripcslashes($comment_row->comment_text);
 			$comment_id = $comment_row->ID;
+			$rfi_id = $GLOBALS['post']->ID;
 
 			// Url of current page (without any GET vars):
 			$current_page_url = $_SERVER['PATH_INFO'];
 			
 			// Vote URL:
-			$crowdio_vote_up_url = "$current_page_url?crowdio_vote=up&comment_id=$comment_id";
-			$crowdio_vote_down_url = "$current_page_url?crowdio_vote=down&comment_id=$comment_id";
+			$crowdio_vote_up_url = "$current_page_url?crowdio_vote=up&comment_id=$comment_id&rfi_id=$rfi_id";
+			$crowdio_vote_down_url = "$current_page_url?crowdio_vote=down&comment_id=$comment_id&rfi_id=$rfi_id";
 
 			// Reply link URL:
 			$reply_link_url = $current_page_url . "?replyto=$comment_id#replyform";
+		    
+			// Comment votes
+			$comment_upvotes_count = $wpdb->get_var("SELECT COUNT(*) FROM " . CROWDIO_VOTE_TABLE_NAME . " WHERE comment_id = '$comment_id' AND positive = '1'");
+			$comment_downvotes_count = $wpdb->get_var("SELECT COUNT(*) FROM " . CROWDIO_VOTE_TABLE_NAME . " WHERE comment_id = '$comment_id' AND negative = '1'");
+
+			$comment_vote_score = $score;
 		    print <<<END
 				<div class="idea">
 					<div class="ideaVoteReplyButtons">
-						<span class="ideaVoteButton up"><a href="$crowdio_vote_up_url">&#8743;</a> </span>
-						<span class="ideaVoteButton down"><a href="$crowdio_vote_down_url">&#8744;</a> </span>
+						<span class="ideaVoteButton up"><a href="$crowdio_vote_up_url">&#8743;</a> [$comment_upvotes_count] </span>
+						<span class="ideaVoteButton down"><a href="$crowdio_vote_down_url">&#8744;</a> [$comment_downvotes_count] </span>
+						<span class="ideaVoteTotalScore">Score: [$comment_vote_score] </span>
 						<span class="ideaReplyButton"><a href="$reply_link_url">Reply</a></span>
 					</div>
 					<div class="ideaInfo">
@@ -215,7 +222,7 @@ END;
 		{
 			print '<div class="crowdioComment firstlevel">';
 
-			// print comments 
+			// print comments
 			foreach ($firstlevel as $row) 
 			{
 				$this->display_comment($row, "firstlevel");
@@ -243,6 +250,23 @@ END;
 				}
 			}
 			print '</div><!-- End firstlevel -->';
+
+
+			// Sorted comments
+			$crowdio_db = new CrowdioDatabase();
+			print '<div>';
+			
+			$sorted_comments_levelone = $crowdio_db->get_ranked_votes('comment', $rfi_id);
+
+
+			foreach ($sorted_comments_levelone as $this_comment_ref) {
+				$comment_id = $this_comment_ref['comment_id'];
+				$comment = $wpdb->get_row("SELECT * FROM " . CROWDIO_COMMENT_TABLE_NAME . " WHERE ID = '$comment_id'");
+
+				$this->display_comment($comment, "firstrow", $this_comment_ref['ci_lower_bound']);
+			}
+			print '</div>';
+
 		} else
 		{
 			print '<div class="crowdioNoIdeas">No ideas yet!</div>';

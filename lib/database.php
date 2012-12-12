@@ -7,7 +7,7 @@ class CrowdioDatabase extends Crowdio
 	
 	function __construct()
 	{
-		global $wpdb, $table_prefix;
+
 	}
 
 
@@ -45,6 +45,7 @@ class CrowdioDatabase extends Crowdio
 				negative INT(2),
 				comment_id BIGINT(20),
 				parent_id BIGINT(20),
+				rfi_id BIGINT(20), 
 				PRIMARY KEY (ID) )
 			ENGINE = myisam DEFAULT CHARACTER SET = utf8";
 		
@@ -78,34 +79,50 @@ class CrowdioDatabase extends Crowdio
 			);
 		if ($wpdb->insert_id)
 		{
-			return True;
+			// Add one vote up for new comment:
+			$wpdb->insert(CROWDIO_VOTE_TABLE_NAME,
+				array(
+					'comment_id' => $wpdb->insert_id,
+					'positive' => '1',
+					'negative' => '0',
+					'rfi_id' => $rfi_id
+					)
+			);
+			if ($wpdb->insert_id) {
+				return True;
+			} else
+			{
+				print 'Comment was inserted but default upvote was not.';
+			}
 		} else
 		{
 			$wpdb->show_errors();
 			print 'Error with $wpdb->insert(): '; $wpdb->print_error();
 		}
+
 	
 	}
 
-	function get_ranked_votes($type)
+	function get_ranked_votes($type, $rfi_id)
 	{
-		switch ($type) {	
+		global $wpdb;
+
+		switch ($type) {
 			case 'comment':
-				$comment_id = "comment_id";
-				$table = "$crowdio_vote_table_name";
+				$comment_id_field = "comment_id";
+				$table = CROWDIO_VOTE_TABLE_NAME;
 				break;
 
 			case 'reply':
-				$comment_id = "comment_id , parent_id";
-				$table = "$crowdio_vote_table_name";
+				$comment_id_field = "comment_id , parent_id";
+				$table = CROWDIO_VOTE_TABLE_NAME;
 				break;
 		}
 
-		$ranking_query = "
-				SELECT '$comment_id', 
+		$ranking_query = "SELECT DISTINCT $comment_id_field, 
 					(
 						(positive + 1.9208) / 
-						(pos + negative) - 
+						(positive + negative) - 
 						1.96 * SQRT(
 							(positive * negative) / 
 							(positive + negative) + 0.9604) / 
@@ -113,11 +130,33 @@ class CrowdioDatabase extends Crowdio
 					) /
 					(1 + 3.8416 / (positive + negative)) 
 					AS ci_lower_bound 
-					FROM '$table' 
+					FROM $table 
 					WHERE positive + negative > 0 
+					AND rfi_id = '$rfi_id' 
 					ORDER BY ci_lower_bound DESC;";
 
-		return $wpdb->get_result($ranking_query);
+		$results = $wpdb->get_results($ranking_query, 'ARRAY_A');
+
+		//usort($results, array($this, 'sort_ranked_votes'));
+
+		//return $results;
+
+		$score = array();
+		foreach ($results as $key => $row)
+		{
+		    $score[$key] = $row['ci_lower_bound'];
+		}
+		array_multisort($score, SORT_DESC, $results);
+
+		return $results;
+
+	}
+	function sort_ranked_votes($a, $b) {
+		if ($a->value == $b->value) {
+			return 0;
+		} else {
+			return $a->value < $b->value ? 1 : -1;
+		}
 	}
 }
 
