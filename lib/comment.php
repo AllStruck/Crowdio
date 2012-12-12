@@ -105,16 +105,16 @@ END;
 					    </form>
 					</div>
 END;
-			} else // User has already submitted an idea, so do not display main idea form.
-			{
+			} else
+			{	// User has already submitted an idea, so do not display main idea form.
 				print <<<END
 					<div class="crowdioFormNotice">
 						<span class="noticeText">You have already submitted an idea here. You can still reply to other ideas though!</span>
 					</div>
 END;
 			}
-		} else // User is not logged in, so do not display any form.
-		{
+		} else
+		{	// User is not logged in, so do not display any form.
 			print <<<END
 				<div class="crowdioFormNotice">
 					<span class="noticeText">Please <a href="/wp-login.php">Log In</a> or <a href="/wp-login.php?action=register">Register</a> to add your idea.</span>
@@ -124,12 +124,17 @@ END;
 	}
 
 	function add_comment()
-	{
+	{	// Adds comment to the database, 
+		// or actually just sets up data and passes to $crowdio_db->insert_comment().
 		global $wpdb, $current_user;
 		$sid = session_id();
 		get_currentuserinfo();
 
-		if (is_user_logged_in()) {
+
+		if (is_user_logged_in())
+		{	// Start getting ready to insert since the user is still logged in.
+			// We test this twice to filter out any rogue submits.
+			// We also test to make sure the referrer was this site...
 			$name = $_POST['crowdio_comment_name'];
 			$email = $_POST['crowdio_comment_email'];
 			$comment_text = $_POST['crowdio_comment_content'];
@@ -142,16 +147,23 @@ END;
 			$parent_id = $_POST['crowdio_comment_parent_id'];
 			
 			$result = $crowdio_db->insert_comment($name, $email, $comment_text, $user_ip, $user_id, $user_url, $session_id, $rfi_id, $parent_id);
-			if ($result) {
+			if ($result)
+			{	// If result is true this means our insert worked, 
+				// we unset $_POST since we don't want to pre-fill the form any longer.
 				unset($_POST);
 			}
-		} else {
+		} else
+		{	// This is a simple print since it should never be seen, 
+			// but just in case this is printed if the user isn't logged in.
 			print("Can't save comment, user not logged in.");
 		}
 	}
 
 	function display_comment($comment_row, $levelclass)
-	{
+	{	// Display one comment, this is called from display_comments() multiple times, 
+		// $comment_row is an object containing all of the data for just one comment, 
+		// and $levelclass is a string setting the class name indicating how deep this 
+		// comment is.
 		global $wpdb;
 		$commentUser = get_userdata($comment_row->user_id);
 		
@@ -229,28 +241,29 @@ END;
 	}
 
 	public function check_comment_submission()
-	{
+	{	// A submit on the comment form was sent, 
+		// let's make sure we have everything needed.
 		if (!empty($_POST['crowdio_comment_user_id']) &&
 		!empty($_POST['crowdio_comment_name']) &&
 		!empty($_POST['crowdio_comment_email']) &&
 		!empty($_POST['crowdio_rfi_id']) &&
 		!empty($_POST['crowdio_comment_url']) &&
 		!empty($_POST['crowdio_comment_content']))
-		{
+		{	// Looks good, let's start adding the new comment.
 			$this->add_comment();
 		} else
-		{
+		{	// Missing needed data, not going to save.
+			// Instead let's find out what happened and alert the user if applicable.
 			if (empty($_POST['crowdio_comment_content']))
 			{
 				$GLOBALS['crowdio_comment_submit_error'] = 'Required field was left blank.';
 				$GLOBALS['crowdio_comment_blank_fields'] = array("crowdio_comment_content");
 			}
-			print("Can't save comment, missing _POST data.");
 		}
 	}
 	
 	public function modify_page_content($content)
-	{
+	{	// This is called using a WordPress filter to show our custom comment stuff.
 		if (is_single() && $GLOBALS['post']->post_type == 'crowdios')
 		{
 			$content .= $this->display_comments();
