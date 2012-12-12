@@ -61,15 +61,15 @@ END;
 				
 				// Set up the message about which URL will be used on ideas.
 				$addCommentInstructionWebsite = !empty($user_url) ? 
-					"Your website address on your profile is $user_url" : 
-					'Your website address is blank on your profile.';
+					"Your website address on your profile is <i>$user_url</i> <BR>" : 
+					'Your website address is <b>blank</b> on your profile. <BR>';
 				// Append to this URL message how to change the URL on their profile.
 				$addCommentInstructionWebsite .= ' You can <a href="/wp-admin/profile.php">edit your profile</a> at any time.';
 
 				// Set up prompt text depending on if this is a reply or a top level idea.
 				$replyOrIdeaPrompt = empty($_GET['replyto']) ?
-					'Write your idea here:' :
-					'Write your reply here:';
+					'Write your idea here: <BR>' :
+					'Write your reply here: <BR>';
 
 				// Add a special class to the comment form field if it was blank.
 				$commentContentClass = in_array('crowdio_comment_content', $GLOBALS['crowdio_comment_blank_fields']) ? 
@@ -92,13 +92,13 @@ END;
 
 						    <div id="crowdioAddCommentInstructions">
 						    	<div id="crowdioAddCommentInstructionOne">Add your best idea (one per person):</div>
-						    	<div id="crowdioAddCommentInstructionUser">Your idea will be left as $display_name.</div>
+						    	<div id="crowdioAddCommentInstructionUser">Your idea will be left as <I>$display_name</I>.</div>
 						    	<div id="crowdioAddCommentInstructionWebsite">$addCommentInstructionWebsite</div>
 						    </div>
 						    
 						    <fieldset>
-						    	<label for="crowdio_comment_content">$replyOrIdeaPrompt</label>
-						    	<textarea class="$commentContentClass" rows="4" cols="20" id="crowdio_comment_content" name="crowdio_comment_content">$user_comment</textarea>
+						    	<label for="crowdio_comment_content"><BR>$replyOrIdeaPrompt</label>
+						    	<textarea class="$commentContentClass" rows="4" cols="40" id="crowdio_comment_content" name="crowdio_comment_content">$user_comment</textarea>
 						    </fieldset>
 				
 					        <div class="crowdio_row"> <input type="submit" value="Save" id="submit" name="submit"  /> </div>
