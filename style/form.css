@@ -33,3 +33,11 @@ V 1.0
 	margin-left: 20pt;
 	border-left: 1px solid gray;
 }
+
+.post-type-archive-crowdios .comments-link {
+	display:none;
+}
+
+.post-type-archive-crowdios .entry-utility .meta-sep {
+	display:none;
+}
