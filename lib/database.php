@@ -36,7 +36,8 @@ class CrowdioDatabase extends Crowdio
 		
 		$vote_table_create_query = "
 			CREATE TABLE IF NOT EXISTS $crowdio_vote_table_name (
-				ID BIGINT(20) NOT NULL,
+				ID BIGINT(20) NOT NULL AUTO_INCREMENT,
+				vote_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 				user_id BIGINT(20),
 				user_ip VARCHAR(100),
 				session_id VARCHAR(250),

@@ -14,7 +14,7 @@ class Crowdio
 		define('CROWDIO_PLUGIN_DIR_PATH', plugin_dir_path(CROWDIO_MAIN_PLUGIN_FILE));
 		define('CROWDIO_PLUGIN_DIR_URL', plugin_dir_url(CROWDIO_MAIN_PLUGIN_FILE));
 		define('CROWDIO_COMMENT_TABLE_NAME', $table_prefix . 'crowdio_comments');
-		define('CROWDIO_VOTE_TABLE_NAME', $table_prefix . 'crowdio_votes ');
+		define('CROWDIO_VOTE_TABLE_NAME', $table_prefix . 'crowdio_votes');
 	
 		add_action( 'init', array( $this, 'add_rfi_post_type' ) );
 		
@@ -39,6 +39,11 @@ class Crowdio
 		}
 		
 		add_action('init', array($this, 'add_form_css'));
+
+		$crowdio_voted = new CrowdioVote();
+		if (!empty($_GET['crowdio_vote']))
+		{	add_action('init', array($crowdio_voted, 'save_vote')); }
+		
 	}
 
 	
