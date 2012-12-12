@@ -174,8 +174,9 @@ END;
 			$url = $commentUser->user_url;
 			$comment = $comment_row->comment_text;
 			$comment_id = $comment_row->ID;
-			$crowdio_vote_up = "crowdio_vote=up";
-			$crowdio_vote_down = "crowdio_vote=down";
+			$vote_url = $_SERVER['PATH_INFO'];
+			$crowdio_vote_up = "$vote_url?crowdio_vote=up&comment_id=$comment_id";
+			$crowdio_vote_down = "$vote_url?crowdio_vote=down&comment_id=$comment_id";
 
 
 			$reply_link_url = $_SERVER['REQUEST_URI'];
@@ -189,8 +190,8 @@ END;
 		    print <<<END
 				<div class="idea">
 					<div class="ideaVoteReplyButtons">
-						<span class="ideaVoteButton up"><a href="$reply_link_url?$crowdio_vote_up?comment_id=$comment_id">&#8743;</a> </span>
-						<span class="ideaVoteButton down"><a href="$reply_link_url?$crowdio_vote_down?comment_id=$comment_id">&#8744;</a> </span>
+						<span class="ideaVoteButton up"><a href="$crowdio_vote_up">&#8743;</a> </span>
+						<span class="ideaVoteButton down"><a href="$crowdio_vote_down">&#8744;</a> </span>
 						<span class="ideaReplyButton"><a href="$reply_link_url">Reply</a></span>
 					</div>
 					<div class="ideaInfo">
