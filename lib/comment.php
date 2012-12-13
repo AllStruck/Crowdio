@@ -78,6 +78,18 @@ END;
 					"submittedBlank" :
 					"";
 
+				// Message for submitting top level idea (not used for replies):
+				$idea_message = "";
+				if ($replyOrIdea = "idea") {
+					$ideaMessage = <<<END
+									<div id="crowdioAddCommentInstructionOne">
+										Add your best idea (one per person):
+									</div>
+							    	<div id="crowdioAddCommentInstructionUser">
+							    		Your idea will be left as <i>$display_name</i>.
+							    	</div>
+END;
+				}
 				// Finally we can show the form:
 				print <<<END
 					<a name="replyform">&nbsp</a>
@@ -92,8 +104,7 @@ END;
 					    	<input type="hidden" name="crowdio_comment_submit" value="verify" />
 
 						    <div id="crowdioAddIdeaInstructions">
-						    	<div id="crowdioAddCommentInstructionOne">Add your best idea (one per person):</div>
-						    	<div id="crowdioAddCommentInstructionUser">Your idea will be left as <I>$display_name</I>.</div>
+						    $idea_message
 						    	<div id="crowdioAddCommentInstructionWebsite">$addCommentInstructionWebsite</div>
 						    </div>
 						    
@@ -203,12 +214,6 @@ END;
 			$follow = $comment_vote_score > 10 ? "dofollow" : "nofollow";
 		    print <<<END
 				<div class="idea">
-					<div class="ideaVoteReplyButtons">
-						<span class="ideaVoteButton up"><a href="$crowdio_vote_up_url">&#8743;</a> [$comment_upvotes_count] </span>
-						<span class="ideaVoteButton down"><a href="$crowdio_vote_down_url">&#8744;</a> [$comment_downvotes_count] </span>
-						<span class="ideaVoteTotalScore">Score: [$comment_vote_score] </span>
-						<span class="ideaReplyButton"><a href="$reply_link_url">Reply</a></span>
-					</div>
 					<div class="ideaInfo">
 						<span class="ideaDate">$created</span>:
 						<span class="ideaName"> <a href="$url" rel="$follow">$name</a></span>
@@ -216,6 +221,14 @@ END;
 					</div>
 
 					<div class="ideaContent">$comment</div>
+					
+					<div class="ideaVoteReplyButtons">
+						<span class="ideaVotePrompt">Vote </span>
+						<span class="ideaVoteButton up"><a href="$crowdio_vote_up_url">&#8743;</a> [$comment_upvotes_count] </span>
+						<span class="ideaVoteButton down"><a href="$crowdio_vote_down_url">&#8744;</a> [$comment_downvotes_count] </span>
+						<span class="ideaVoteTotalScore">Score: [$comment_vote_score] </span>
+						<span class="ideaReplyButton"><a href="$reply_link_url">Reply</a></span>
+					</div>
 				</div>
 END;
 		}
