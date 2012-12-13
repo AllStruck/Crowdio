@@ -10,7 +10,7 @@ class CrowdioDatabase extends Crowdio
 
 	}
 
-
+	// Create custom tables for storing votes and comments:
 	function create_tables() {
 		global $wpdb, $table_prefix;
 		$crowdio_comment_table_name = CROWDIO_COMMENT_TABLE_NAME;
@@ -55,6 +55,7 @@ class CrowdioDatabase extends Crowdio
 		$wpdb->query($vote_table_create_query);
 	}
 
+	// Add comment to database:
 	function insert_comment($name, 
 							$email, 
 							$comment_text, 
@@ -111,6 +112,7 @@ class CrowdioDatabase extends Crowdio
 	
 	}
 
+	// Pull comments using ranking algorithm.
 	function get_ranked_votes($type, $rfi_id, $parent_id='0')
 	{
 		global $wpdb;
