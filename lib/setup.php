@@ -6,6 +6,7 @@
 class Crowdio
 {
 
+	// Handle the top level setup and handling of related incoming requests:
 	public function __construct()
 	{	
 		define('CROWDIO_DEBUG_MESSAGE_LEVEL', 0);
@@ -16,7 +17,8 @@ class Crowdio
 		define('CROWDIO_PLUGIN_DIR_URL', plugin_dir_url(CROWDIO_MAIN_PLUGIN_FILE));
 		define('CROWDIO_COMMENT_TABLE_NAME', $table_prefix . 'crowdio_comments');
 		define('CROWDIO_VOTE_TABLE_NAME', $table_prefix . 'crowdio_votes');
-	
+		
+		// Add WordPress custom post type for "Requests for Ideas":
 		add_action( 'init', array( $this, 'add_rfi_post_type' ) );
 		
 		$plugin_path = CROWDIO_PLUGIN_DIR_PATH;
@@ -49,13 +51,14 @@ class Crowdio
 		
 	}
 
-	
+	// Add form CSS file to HEAD:
 	function add_form_css() {
 		wp_deregister_style('cloudio_form_css');
 		wp_register_style('cloudio_form_css', CROWDIO_PLUGIN_DIR_URL . 'style/form.css');
 		wp_enqueue_style('cloudio_form_css');
 	}
 
+	// Add custom post type for "Requests for Ideas":
 	public function add_rfi_post_type() {
 		$labels = array(
 		    'name' => _x('Request for Ideas', 'post type general name', 'crowdio_rfis'),
@@ -90,6 +93,8 @@ class Crowdio
 		register_post_type('crowdios', $args);
 		remove_post_type_support( 'crowdios', 'comments' );
 	}
+
+	// Helper function for debug messages on the front-end:
 	function debug($message) {
 		switch (CROWDIO_DEBUG_MESSAGE_LEVEL) {
 			case 1:
