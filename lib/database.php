@@ -4,6 +4,9 @@
 */
 class CrowdioDatabase extends Crowdio
 {
+	function __construct() {
+		
+	}
 
 	// Create custom tables for storing votes and comments:
 	function create_tables() {
