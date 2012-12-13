@@ -9,6 +9,7 @@ class CrowdioVote extends Crowdio
 		
 	}
 
+	// Update comment in comments table to reflect current total in votes table:
 	function update_vote_totals() {
 		parent::debug("Updating vote totals.");
 		global $wpdb;
@@ -28,7 +29,7 @@ class CrowdioVote extends Crowdio
 		);
 	}
 
-
+	// Add new vote to votes table:
 	function add_vote() {
 		parent::debug("Adding vote.");
 		global $wpdb, $current_user;
@@ -61,6 +62,7 @@ class CrowdioVote extends Crowdio
 				));
 	}
 
+	// Remove existing vote from votes table:
 	function remove_vote($vote_id) {
 		parent::debug("Removing vote.");
 		global $wpdb;
@@ -71,6 +73,8 @@ class CrowdioVote extends Crowdio
 		);
 	}
 
+	// Take all incoming requests to manage votes,
+	// checks to make sure duplicates aren't added etc.
 	function handle_vote_submission() {
 		parent::debug("Handling vote submission.");
 		global $current_user, $wpdb;
