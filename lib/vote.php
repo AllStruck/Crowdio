@@ -104,6 +104,7 @@ class CrowdioVote extends Crowdio
 		$existing_upvote = $wpdb->get_row("SELECT * FROM " . CROWDIO_VOTE_TABLE_NAME . " WHERE user_id = '$user_id' AND comment_id = '$comment_id' && positive = '1'");
 		$existing_downvote = $wpdb->get_row("SELECT * FROM " . CROWDIO_VOTE_TABLE_NAME . " WHERE user_id = '$user_id' AND comment_id = '$comment_id' && negative = '1'");
 
+		// Determine what the current action is:
 		if (!$crowdio_vote_up && !$crowdio_vote_down)
 		{	// Processing an unvote:
 			if ($crowdio_unvote_up && !empty($existing_upvote))
