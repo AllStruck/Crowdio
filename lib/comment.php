@@ -20,9 +20,10 @@ class CrowdioComment extends Crowdio {
 		$display_name = $current_user->display_name;
 		$user_email = $current_user->user_email;
 		$user_id = $current_user->ID;
+		$commentParent = NULL;
 
 		$action_url = $_SERVER["REQUEST_URI"];
-		$user_comment = $_POST['crowdio_comment_content'];
+		$user_comment = isset($_POST['crowdio_comment_content']) ? $_POST['crowdio_comment_content'] : NULL;
 		$rfi_id = $GLOBALS['post']->ID;
 
 		// Check for an existing top level comment (idea) submitted by this user on this RFI.
@@ -33,7 +34,7 @@ class CrowdioComment extends Crowdio {
 
 			if (!empty($_GET['replyto']))
 			{	// If user clicked reply link, set the parent and check to make sure there is an existing comment that matches:
-				$commentParent = $_GET['replyto'];
+				$commentParent = isset($_GET['replyto']) ? $_GET['replyto'] : NULL;
 				$commentParentExistsCheck = $wpdb->get_row("SELECT * FROM " . CROWDIO_COMMENT_TABLE_NAME . " WHERE ID = '" . $_GET['replyto'] . "'");
 			} else
 			{	// User is not currently replying, so make sure parent is not set.
@@ -51,7 +52,7 @@ class CrowdioComment extends Crowdio {
 					unset($commentParent);
 				}
 				// Grab error text for display below.
-				$errors = $GLOBALS['crowdio_comment_submit_error'];
+				$errors = isset($GLOBALS['crowdio_comment_submit_error']) ? $GLOBALS['crowdio_comment_submit_error'] : NULL;
 				// Show the error(s).
 				print <<<END
 					<div class="crowdio_form_error">
@@ -66,8 +67,9 @@ END;
 				// Append to this URL message how to change the URL on their profile.
 				$addCommentInstructionWebsite .= ' You can <a href="/wp-admin/profile.php">edit your profile</a> at any time.';
 
+				$replyOrIdea = empty($_GET['replyto']) ? "reply" : "idea";
 				// Set up prompt text depending on if this is a reply or a top level idea.
-				$replyOrIdeaPrompt = empty($_GET['replyto']) ?
+				$replyOrIdeaPrompt = ($replyOrIdea = "idea") ?
 					'Write your idea here: <BR>' :
 					'Write your reply here: <BR>';
 
@@ -89,7 +91,7 @@ END;
 					    	<input type="hidden" name="crowdio_comment_parent_id" value="$commentParent" />
 					    	<input type="hidden" name="crowdio_comment_submit" value="verify" />
 
-						    <div id="crowdioAddCommentInstructions">
+						    <div id="crowdioAddIdeaInstructions">
 						    	<div id="crowdioAddCommentInstructionOne">Add your best idea (one per person):</div>
 						    	<div id="crowdioAddCommentInstructionUser">Your idea will be left as <I>$display_name</I>.</div>
 						    	<div id="crowdioAddCommentInstructionWebsite">$addCommentInstructionWebsite</div>
@@ -158,7 +160,7 @@ END;
 		}
 	}
 
-	function display_comment($comment_row, $levelclass, $score="")
+	function display_comment($comment_row, $levelclass)
 	{	// Display one comment, this is called from display_comments() multiple times, 
 		// $comment_row is an object containing all of the data for just one comment, 
 		// and $levelclass is a string setting the class name indicating how deep this 
@@ -168,6 +170,7 @@ END;
 		
 		if ($commentUser)
 		{
+			$user_id = $comment_row->user_id;
 			$created = $comment_row->created_timestamp;
 			$name = $commentUser->display_name;
 			$url = $commentUser->user_url;
@@ -176,11 +179,18 @@ END;
 			$rfi_id = $GLOBALS['post']->ID;
 
 			// Url of current page (without any GET vars):
-			$current_page_url = $_SERVER['PATH_INFO'];
+			$current_page_url = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : NULL;
 			
-			// Vote URL:
-			$crowdio_vote_up_url = "$current_page_url?crowdio_vote=up&comment_id=$comment_id&rfi_id=$rfi_id";
-			$crowdio_vote_down_url = "$current_page_url?crowdio_vote=down&comment_id=$comment_id&rfi_id=$rfi_id";
+			// Check for existing vote on this comment by this user:
+			$existing_upvote = $wpdb->get_row("SELECT * FROM " . CROWDIO_VOTE_TABLE_NAME . " WHERE comment_id = '$comment_id' AND user_id = '$user_id' AND positive = 1");
+			$existing_downvote = $wpdb->get_row("SELECT * FROM " . CROWDIO_VOTE_TABLE_NAME . " WHERE comment_id = '$comment_id' AND user_id = '$user_id' AND negative = '1'");
+
+			$crowdio_vote_up_url = $existing_upvote ? 
+				"$current_page_url?crowdio_unvote=up&comment_id=$comment_id" : // Unvote up
+				"$current_page_url?crowdio_vote=up&comment_id=$comment_id"; // Regular vote up
+			$crowdio_vote_down_url = $existing_downvote ? 
+				"$current_page_url?crowdio_unvote=down&comment_id=$comment_id" : // Unvote down
+				"$current_page_url?crowdio_vote=down&comment_id=$comment_id&rfi_id=$rfi_id"; // Regular vote up
 
 			// Reply link URL:
 			$reply_link_url = $current_page_url . "?replyto=$comment_id#replyform";
@@ -189,7 +199,8 @@ END;
 			$comment_upvotes_count = $wpdb->get_var("SELECT COUNT(*) FROM " . CROWDIO_VOTE_TABLE_NAME . " WHERE comment_id = '$comment_id' AND positive = '1'");
 			$comment_downvotes_count = $wpdb->get_var("SELECT COUNT(*) FROM " . CROWDIO_VOTE_TABLE_NAME . " WHERE comment_id = '$comment_id' AND negative = '1'");
 
-			$comment_vote_score = $score;
+			$comment_vote_score = $comment_row->upvotes - $comment_row->downvotes;
+			$follow = $comment_vote_score > 10 ? "dofollow" : "nofollow";
 		    print <<<END
 				<div class="idea">
 					<div class="ideaVoteReplyButtons">
@@ -200,7 +211,7 @@ END;
 					</div>
 					<div class="ideaInfo">
 						<span class="ideaDate">$created</span>:
-						<span class="ideaName"> <a href="$url">$name</a></span>
+						<span class="ideaName"> <a href="$url" rel="$follow">$name</a></span>
 						<span> said:</span>
 					</div>
 
@@ -220,12 +231,15 @@ END;
 		
 		if ($firstlevel)
 		{
-			print '<div class="crowdioComment firstlevel">';
+			// Sorted comments
+			$crowdio_db = new CrowdioDatabase();
+			print '<div class="firstlevel">';
+			
+			$sorted_comments_levelone = $crowdio_db->get_ranked_votes('comment', $rfi_id);
 
-			// print comments
-			foreach ($firstlevel as $row) 
-			{
-				$this->display_comment($row, "firstlevel");
+
+			foreach ($sorted_comments_levelone as $row) {
+				$this->display_comment($row, "firstrow");
 
 				$secondlevel = $wpdb->get_results("SELECT * FROM $comment_table WHERE rfi_id = '$rfi_id' AND parent_id = '$row->ID'");
 				if ($secondlevel)
@@ -248,22 +262,6 @@ END;
 					}
 					print '</div><!-- End secondlevel -->';
 				}
-			}
-			print '</div><!-- End firstlevel -->';
-
-
-			// Sorted comments
-			$crowdio_db = new CrowdioDatabase();
-			print '<div>';
-			
-			$sorted_comments_levelone = $crowdio_db->get_ranked_votes('comment', $rfi_id);
-
-
-			foreach ($sorted_comments_levelone as $this_comment_ref) {
-				$comment_id = $this_comment_ref['comment_id'];
-				$comment = $wpdb->get_row("SELECT * FROM " . CROWDIO_COMMENT_TABLE_NAME . " WHERE ID = '$comment_id'");
-
-				$this->display_comment($comment, "firstrow", $this_comment_ref['ci_lower_bound']);
 			}
 			print '</div>';
 

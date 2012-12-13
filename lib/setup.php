@@ -7,7 +7,8 @@ class Crowdio
 {
 
 	public function __construct()
-	{
+	{	
+		define('CROWDIO_DEBUG_MESSAGE_LEVEL', 0);
 		global $wpdb, $table_prefix;
 		session_start();
 
@@ -38,11 +39,13 @@ class Crowdio
 			add_action('init', array($crowdio_comment, 'check_comment_submission'));
 		}
 		
+		// Add CSS to head for the comment form:
 		add_action('init', array($this, 'add_form_css'));
 
+		// Handle votes if GET var exists requesting it:
 		$crowdio_voted = new CrowdioVote();
-		if (!empty($_GET['crowdio_vote']))
-		{	add_action('init', array($crowdio_voted, 'save_vote')); }
+		if (!empty($_GET['crowdio_vote']) || !empty($_GET['crowdio_unvote']))
+		{	add_action('init', array($crowdio_voted, 'handle_vote_submission')); }
 		
 	}
 
@@ -86,6 +89,14 @@ class Crowdio
 		);
 		register_post_type('crowdios', $args);
 		remove_post_type_support( 'crowdios', 'comments' );
+	}
+	function debug($message) {
+		switch (CROWDIO_DEBUG_MESSAGE_LEVEL) {
+			case 1:
+				print $message . "<br/>\n";
+			case 0:
+				break;
+		}
 	}
 }
 

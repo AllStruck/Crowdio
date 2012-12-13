@@ -30,6 +30,8 @@ class CrowdioDatabase extends Crowdio
 				comment_text TEXT,
 				parent_id BIGINT(20),
 				rfi_id BIGINT(20),
+				upvotes INT(20),
+				downvotes INT(20),
 				PRIMARY KEY (ID)
 				)
 			ENGINE = myisam DEFAULT CHARACTER SET = utf8;";
@@ -63,6 +65,9 @@ class CrowdioDatabase extends Crowdio
 							$rfi_id,
 							$parent_id) {
 		global $wpdb;
+
+		$parent_id = empty($parent_id) ? NULL : $parent_id;
+
 		// write data to SQL $wpdb->insert( $table, $data, $format );
 		$wpdb->insert(CROWDIO_COMMENT_TABLE_NAME,
 			array(
@@ -74,7 +79,9 @@ class CrowdioDatabase extends Crowdio
 			    'user_url' => $user_url,
 			    'session_id' => $session_id,
 			    'rfi_id' => $rfi_id,
-			    'parent_id' => $parent_id
+			    'parent_id' => $parent_id,
+			    'upvotes' => '1',
+			    'downvotes' => '0'
 			    )
 			);
 		if ($wpdb->insert_id)
@@ -85,14 +92,15 @@ class CrowdioDatabase extends Crowdio
 					'comment_id' => $wpdb->insert_id,
 					'positive' => '1',
 					'negative' => '0',
-					'rfi_id' => $rfi_id
+					'rfi_id' => $rfi_id,
+					'user_id' => $user_id
 					)
 			);
 			if ($wpdb->insert_id) {
 				return True;
 			} else
 			{
-				print 'Comment was inserted but default upvote was not.';
+				print 'Comment was inserted but default upvote was not.'; $wpdb->print_error();
 			}
 		} else
 		{
@@ -103,60 +111,50 @@ class CrowdioDatabase extends Crowdio
 	
 	}
 
-	function get_ranked_votes($type, $rfi_id)
+	function get_ranked_votes($type, $rfi_id, $parent_id='0')
 	{
 		global $wpdb;
 
 		switch ($type) {
 			case 'comment':
-				$comment_id_field = "comment_id";
-				$table = CROWDIO_VOTE_TABLE_NAME;
+				$comment_id_field = "ID";
+				$table = CROWDIO_COMMENT_TABLE_NAME;
 				break;
 
 			case 'reply':
 				$comment_id_field = "comment_id , parent_id";
-				$table = CROWDIO_VOTE_TABLE_NAME;
+				$table = CROWDIO_COMMENT_TABLE_NAME;
 				break;
 		}
 
-		$ranking_query = "SELECT DISTINCT $comment_id_field, 
+			$rfi_id = $GLOBALS['post']->ID;
+
+		$ranking_query = "SELECT $comment_id_field, 
+					upvotes, downvotes, created_timestamp, comment_text, user_id, 
 					(
-						(positive + 1.9208) / 
-						(positive + negative) - 
+						(upvotes + 1.9208) / 
+						(upvotes + downvotes) - 
 						1.96 * SQRT(
-							(positive * negative) / 
-							(positive + negative) + 0.9604) / 
-				   			(positive + negative)
+							(upvotes * downvotes) / 
+							(upvotes + downvotes) + 0.9604) / 
+				   			(upvotes + downvotes)
 					) /
-					(1 + 3.8416 / (positive + negative)) 
+					(1 + 3.8416 / (upvotes + downvotes)) 
 					AS ci_lower_bound 
 					FROM $table 
-					WHERE positive + negative > 0 
+					WHERE upvotes + downvotes > -1 
 					AND rfi_id = '$rfi_id' 
+					AND parent_id = $parent_id 
 					ORDER BY ci_lower_bound DESC;";
 
-		$results = $wpdb->get_results($ranking_query, 'ARRAY_A');
+		$results = $wpdb->get_results($ranking_query);
 
 		//usort($results, array($this, 'sort_ranked_votes'));
 
 		//return $results;
 
-		$score = array();
-		foreach ($results as $key => $row)
-		{
-		    $score[$key] = $row['ci_lower_bound'];
-		}
-		array_multisort($score, SORT_DESC, $results);
-
 		return $results;
 
 	}
-	function sort_ranked_votes($a, $b) {
-		if ($a->value == $b->value) {
-			return 0;
-		} else {
-			return $a->value < $b->value ? 1 : -1;
-		}
-	}
-}
 
+}
