@@ -196,6 +196,10 @@ END;
 			$existing_upvote = $wpdb->get_row("SELECT * FROM " . CROWDIO_VOTE_TABLE_NAME . " WHERE comment_id = '$comment_id' AND user_id = '$user_id' AND positive = 1");
 			$existing_downvote = $wpdb->get_row("SELECT * FROM " . CROWDIO_VOTE_TABLE_NAME . " WHERE comment_id = '$comment_id' AND user_id = '$user_id' AND negative = '1'");
 
+			// Set special classes for if user has already voted:
+			$has_voted_up_class = $existing_upvote ? "currentUserHasVotedUp" : "";
+			$has_voted_down_class = $existing_downvote ? "currentUserHasVotedDown" : "";
+			 
 			$crowdio_vote_up_url = $existing_upvote ? 
 				"$current_page_url?crowdio_unvote=up&comment_id=$comment_id" : // Unvote up
 				"$current_page_url?crowdio_vote=up&comment_id=$comment_id"; // Regular vote up
@@ -224,8 +228,8 @@ END;
 					
 					<div class="ideaVoteReplyButtons">
 						<span class="ideaVotePrompt">Vote </span>
-						<span class="ideaVoteButton up"><a href="$crowdio_vote_up_url">&#8743;</a> [$comment_upvotes_count] </span>
-						<span class="ideaVoteButton down"><a href="$crowdio_vote_down_url">&#8744;</a> [$comment_downvotes_count] </span>
+						<span class="ideaVoteButton up $has_voted_up_class"><a href="$crowdio_vote_up_url">&#8743;</a> [$comment_upvotes_count] </span>
+						<span class="ideaVoteButton down $has_voted_down_class"><a href="$crowdio_vote_down_url">&#8744;</a> [$comment_downvotes_count] </span>
 						<span class="ideaVoteTotalScore">Score: [$comment_vote_score] </span>
 						<span class="ideaReplyButton"><a href="$reply_link_url">Reply</a></span>
 					</div>
