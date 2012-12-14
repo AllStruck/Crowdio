@@ -60,11 +60,12 @@ V 1.0
 	font-size: 1.5em;
 	font-family: "Arial";
 	text-decoration: none;
+	color: gray !important;
 }
 
 
 /* Style voting buttons per their vote, if they have voted. */
-.currentUserHasVotedUp .ideaVoteButton a,
-.currentUserHasVotedDown .ideaVoteButton a {
-	color: grey !important;
+.currentUserHasVotedUp .ideaVoteButton.up a,
+.currentUserHasVotedDown .ideaVoteButton.down a {
+	color: orange !important;
 }
