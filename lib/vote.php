@@ -140,13 +140,11 @@ class CrowdioVote extends Crowdio
 			$this->remove_vote($existing_downvote->ID);
 			$this->add_vote();
 		} elseif ($crowdio_vote_down && $existing_upvote)
-		{	// User cicked downvote, and they already have an upvote,
-			// let's remove their upvote and make it a downvote.
+		{	parent::what_is_happening("User cicked downvote, and they already have an upvote, let's remove their upvote and make it a downvote.", 3);
 			$this->remove_vote($existing_upvote->ID);
 			$this->add_vote();
 		} elseif (($crowdio_vote_up || $crowdio_vote_down) && (!$existing_upvote && !$existing_downvote)) {
-			// User wants to vote and hasn't voted at all yet...
-			// We'll just add their vote in.
+			parent::what_is_happening("User wants to vote and hasn't voted at all yet... we'll just add their vote in.", 3);
 			$this->add_vote();
 		}
 		
