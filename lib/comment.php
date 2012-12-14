@@ -145,7 +145,7 @@ END;
 
 
 		if (is_user_logged_in())
-		{	// Start getting ready to insert since the user is still logged in.
+		{	parent::explain("Getting ready to insert comment since the user is logged in.", 3);
 			// We test this twice to filter out any rogue submits.
 			// We also test to make sure the referrer was this site...
 			$name = $_POST['crowdio_comment_name'];
@@ -161,14 +161,15 @@ END;
 			
 			$result = $crowdio_db->insert_comment($name, $email, $comment_text, $user_ip, $user_id, $user_url, $session_id, $rfi_id, $parent_id);
 			if ($result)
-			{	// If result is true this means our insert worked, 
-				// we unset $_POST since we don't want to pre-fill the form any longer.
+			{	
+				parent::explain("Comment appears to be added.", 3);
 				unset($_POST);
+			} else {
+				parent::explain("PROBLEM: Our comment was not added.", 1);
 			}
 		} else
-		{	// This is a simple print since it should never be seen, 
-			// but just in case this is printed if the user isn't logged in.
-			print("Can't save comment, user not logged in.");
+		{	
+			parent::explain("Can't save comment, user not logged in.", 1);
 		}
 	}
 
@@ -210,9 +211,13 @@ END;
 				$has_voted_class = "currentUserHasNotVoted";
 			}
 			
+			// Reply link URL:
+			$reply_link_url = $current_page_url . "?replyto=$comment_id#replyform";
+
 			if (!is_user_logged_in()) {
 				// Prepend action vote/reply action link urls with login redirect if visitor not logged in.
-				$crowdio_vote_up_url =  $crowdio_vote_down_url = "/wp-login.php?redirect_to=$current_page_url";
+				$crowdio_vote_up_url =  $crowdio_vote_down_url = HOME_URL . "/wp-login.php?redirect_to=$current_page_url";
+				$reply_link_url = HOME_URL . "/wp-login.php?redirect_to=$current_page_url";
 
 			} else {
 				// Set vote link urls depending on if user has voted
@@ -223,10 +228,6 @@ END;
 					"$current_page_url?crowdio_unvote=down&comment_id=$comment_id" : // Unvote down
 					"$current_page_url?crowdio_vote=down&comment_id=$comment_id&rfi_id=$rfi_id"; // Regular vote up
 			}
-
-
-			// Reply link URL:
-			$reply_link_url = $current_page_url . "?replyto=$comment_id#replyform";
 		    
 			// Comment votes
 			$comment_upvotes_count = $wpdb->get_var("SELECT COUNT(*) FROM " . CROWDIO_VOTE_TABLE_NAME . " WHERE comment_id = '$comment_id' AND positive = '1'");
@@ -242,7 +243,7 @@ END;
 				<div class="idea">
 					<div class="ideaInfo">
 						<span class="ideaName"> <a href="$url" rel="$follow">$name</a></span>
-						<span class="ideaVoteTotalScore">Score: [$comment_vote_score] </span>
+						<span class="ideaVoteTotalScore">Scored $comment_vote_score </span>
 						<span class="ideaDate">$created</span>
 					</div>
 
@@ -317,7 +318,7 @@ END;
 		!empty($_POST['crowdio_rfi_id']) &&
 		//!empty($_POST['crowdio_comment_url']) &&
 		!empty($_POST['crowdio_comment_content']))
-		{	// Looks good, let's start adding the new comment.
+		{	parent::explain("Start adding new comment.", 3);
 			$this->add_comment();
 		} else
 		{	parent::explain("Missing needed data, not going to save. Instead let's find out what happened and alert the user if applicable.", 3);
@@ -330,7 +331,7 @@ END;
 	}
 	
 	public function modify_page_content($content)
-	{	//parent::explain("This is called using a WordPress filter to show our custom comment stuff.", 3);
+	{	parent::explain("Putting comment stuff on the page.", 3);
 		if (is_single() && $GLOBALS['post']->post_type == 'crowdios')
 		{
 			$content .= $this->display_comments();
