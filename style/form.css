@@ -66,6 +66,6 @@ V 1.0
 
 /* Style voting buttons per their vote, if they have voted. */
 .currentUserHasVotedUp .ideaVoteButton.up a,
-.currentUserHasVotedDown .ideaVoteButton.down a {
+.currentUserHasVotedDown .ideaVoteButton.downs a {
 	color: orange !important;
 }
