@@ -74,44 +74,50 @@ class CrowdioDatabase extends Crowdio
 
 		$parent_id = empty($parent_id) ? NULL : $parent_id;
 
-		// write data to SQL $wpdb->insert( $table, $data, $format );
-		$wpdb->insert(CROWDIO_COMMENT_TABLE_NAME,
-			array(
-				'name' => $name,
-				'email' => $email,
-			    'comment_text' => $comment_text,
-			    'user_ip' => $user_ip,
-			    'user_id' => $user_id,
-			    'user_url' => $user_url,
-			    'session_id' => $session_id,
-			    'rfi_id' => $rfi_id,
-			    'parent_id' => $parent_id,
-			    'upvotes' => '1',
-			    'downvotes' => '0'
-			    )
-			);
-		if ($wpdb->insert_id)
-		{
-			// Add one vote up for new comment:
-			$wpdb->insert(CROWDIO_VOTE_TABLE_NAME,
+		// Check to make sure this isn't a duplicate content:
+		$current_user_id = get_current_user_id();
+		$duplicates = $wpdb->get_results("SELECT comment_text FROM " . CROWDIO_COMMENT_TABLE_NAME . " WHERE user_id = '$current_user_id' AND comment_text == '$comment_text' ");
+
+		if (count($duplicates) > 0) {
+			// write data to SQL $wpdb->insert( $table, $data, $format );
+			$wpdb->insert(CROWDIO_COMMENT_TABLE_NAME,
 				array(
-					'comment_id' => $wpdb->insert_id,
-					'positive' => '1',
-					'negative' => '0',
-					'rfi_id' => $rfi_id,
-					'user_id' => $user_id
-					)
-			);
-			if ($wpdb->insert_id) {
-				return True;
+					'name' => $name,
+					'email' => $email,
+				    'comment_text' => $comment_text,
+				    'user_ip' => $user_ip,
+				    'user_id' => $user_id,
+				    'user_url' => $user_url,
+				    'session_id' => $session_id,
+				    'rfi_id' => $rfi_id,
+				    'parent_id' => $parent_id,
+				    'upvotes' => '1',
+				    'downvotes' => '0'
+				    )
+				);
+			if ($wpdb->insert_id)
+			{
+				// Add one vote up for new comment:
+				$wpdb->insert(CROWDIO_VOTE_TABLE_NAME,
+					array(
+						'comment_id' => $wpdb->insert_id,
+						'positive' => '1',
+						'negative' => '0',
+						'rfi_id' => $rfi_id,
+						'user_id' => $user_id
+						)
+				);
+				if ($wpdb->insert_id) {
+					return True;
+				} else
+				{
+					print 'Comment was inserted but default upvote was not.'; $wpdb->print_error();
+				}
 			} else
 			{
-				print 'Comment was inserted but default upvote was not.'; $wpdb->print_error();
+				$wpdb->show_errors();
+				print 'Error with $wpdb->insert(): '; $wpdb->print_error();
 			}
-		} else
-		{
-			$wpdb->show_errors();
-			print 'Error with $wpdb->insert(): '; $wpdb->print_error();
 		}
 
 	

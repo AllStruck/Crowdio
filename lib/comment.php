@@ -178,14 +178,15 @@ END;
 		// and $levelclass is a string setting the class name indicating how deep this 
 		// comment is.
 		global $wpdb;
-		$commentUser = get_userdata($comment_row->user_id);
+		$commentUserData = get_userdata($comment_row->user_id);
 		
-		if ($commentUser)
+		if ($commentUserData)
 		{
+			$current_visitor_user_id = get_current_user_id();
 			$user_id = $comment_row->user_id;
 			$created = $comment_row->created_timestamp;
-			$name = $commentUser->display_name;
-			$url = $commentUser->user_url;
+			$name = $commentUserData->display_name;
+			$url = $commentUserData->user_url;
 			$comment = stripcslashes($comment_row->comment_text);
 			$comment_id = $comment_row->ID;
 			$rfi_id = $GLOBALS['post']->ID;
@@ -194,12 +195,20 @@ END;
 			$current_page_url = get_permalink( $rfi_id );
 			
 			// Check for existing vote on this comment by this user:
-			$existing_upvote = $wpdb->get_row("SELECT * FROM " . CROWDIO_VOTE_TABLE_NAME . " WHERE comment_id = '$comment_id' AND user_id = '$user_id' AND positive = 1");
-			$existing_downvote = $wpdb->get_row("SELECT * FROM " . CROWDIO_VOTE_TABLE_NAME . " WHERE comment_id = '$comment_id' AND user_id = '$user_id' AND negative = '1'");
+			$existing_upvote = $wpdb->get_row("SELECT * FROM " . CROWDIO_VOTE_TABLE_NAME . " WHERE comment_id = '$comment_id' AND user_id = '$current_visitor_user_id' AND positive = 1");
+			$existing_downvote = $wpdb->get_row("SELECT * FROM " . CROWDIO_VOTE_TABLE_NAME . " WHERE comment_id = '$comment_id' AND user_id = '$current_visitor_user_id' AND negative = '1'");
 
-			// Set special classes for if user has already voted:
-			$has_voted_up_class = $existing_upvote ? "currentUserHasVotedUp" : "";
-			$has_voted_down_class = $existing_downvote ? "currentUserHasVotedDown" : "";
+			// Set special classes and icon for if user has already voted:
+			$up_vote_icon = "&#8743;"; $down_vote_icon = "&#8744;";
+			if ($existing_upvote) {
+				$has_voted_class = "currentUserHasVotedUp";
+				$up_vote_icon = "&#10003";
+			} elseif ($existing_downvote) {
+				$has_voted_class = "currentUserHasVotedDown";
+				$down_vote_icon = "&#10003";
+			} else {
+				$has_voted_class = "currentUserHasNotVoted";
+			}
 			 
 			$crowdio_vote_up_url = $existing_upvote ? 
 				"$current_page_url?crowdio_unvote=up&comment_id=$comment_id" : // Unvote up
@@ -229,10 +238,9 @@ END;
 
 					<div class="ideaContent">$comment</div>
 					
-					<div class="ideaVoteReplyButtons">
-						<span class="ideaVotePrompt">Vote </span>
-						<span class="ideaVoteButton up $has_voted_up_class"><a href="$direct_to_login_url$crowdio_vote_up_url">&#8743;</a> [$comment_upvotes_count] </span>
-						<span class="ideaVoteButton down $has_voted_down_class"><a href="$direct_to_login_url$crowdio_vote_down_url">&#8744;</a> [$comment_downvotes_count] </span>
+					<div class="ideaVoteReplyButtons $has_voted_class">
+						<span class="ideaVoteButton up"><a href="$direct_to_login_url$crowdio_vote_up_url">$up_vote_icon</a> [$comment_upvotes_count] </span>
+						<span class="ideaVoteButton down"><a href="$direct_to_login_url$crowdio_vote_down_url">$down_vote_icon</a> [$comment_downvotes_count] </span>
 						<span class="ideaVoteTotalScore">Score: [$comment_vote_score] </span>
 						<span class="ideaReplyButton"><a href="$reply_link_url">Reply</a></span>
 					</div>

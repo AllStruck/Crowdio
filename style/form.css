@@ -21,14 +21,28 @@ V 1.0
 	font-weight: bold;
 }
 
-.crowdioComment {
+.idea {
+	margin:5pt;
 	padding:5pt;
+	border: 1px solid cornflowerblue;
+	border-top-width: 10px;
+	border-radius: 5pt;-moz-border-radius: 5pt;-webkit-border-radius: 5pt;
+
+}
+
+.crowdioComment {
+	padding:23pt;
 }
 .single-crowdios .secondlevel {
 	margin-left: 20pt;
 	border-left: 1px solid gray;
 }
-
+.crowdioComment.secondlevel {
+	border-radius: 0 0 100px 23px;
+	-moz-border-radius: 0 0 100px 23px;
+	border-left: 1px dotted gray;
+	border-bottom: 1px dotted gray;
+}
 .single-crowdios .thirdlevel {
 	margin-left: 20pt;
 	border-left: 1px solid gray;
@@ -42,11 +56,15 @@ V 1.0
 	display:none;
 }
 
-
-#content .idea .currentUserHasVotedUp a,
-#content .idea .currentUserHasVotedDown a,
-#content .idea .currentUserHasVotedUp,
-#content .idea .currentUserHasVotedDown {
-	color: gray !important;
+.ideaVoteButton a {
+	font-size: 1.5em;
+	font-family: "Arial";
 	text-decoration: none;
+}
+
+
+/* Style voting buttons per their vote, if they have voted. */
+.currentUserHasVotedUp .ideaVoteButton a,
+.currentUserHasVotedDown .ideaVoteButton a {
+	color: grey !important;
 }
