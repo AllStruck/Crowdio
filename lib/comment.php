@@ -33,7 +33,7 @@ class CrowdioComment extends Crowdio {
 		{	// Only show the form to logged in users.
 
 			if (!empty($_GET['replyto']))
-			{	// If user clicked reply link, set the parent and check to make sure there is an existing comment that matches:
+			{	// User clicked reply link, set the parent and check to make sure there is an existing comment that matches:
 				$commentParent = isset($_GET['replyto']) ? $_GET['replyto'] : NULL;
 				$commentParentExistsCheck = $wpdb->get_row("SELECT * FROM " . CROWDIO_COMMENT_TABLE_NAME . " WHERE ID = '" . $_GET['replyto'] . "'");
 			} else
@@ -290,8 +290,7 @@ END;
 	}
 
 	public function check_comment_submission()
-	{	// A submit on the comment form was sent, 
-		// let's make sure we have everything needed.
+	{	parent::what_is_happening("A submit on the comment form was sent, let's make sure we have everything needed.", 3);
 		if (!empty($_POST['crowdio_comment_user_id']) &&
 		!empty($_POST['crowdio_comment_name']) &&
 		!empty($_POST['crowdio_comment_email']) &&
@@ -301,8 +300,7 @@ END;
 		{	// Looks good, let's start adding the new comment.
 			$this->add_comment();
 		} else
-		{	// Missing needed data, not going to save.
-			// Instead let's find out what happened and alert the user if applicable.
+		{	parent::what_is_happening("Missing needed data, not going to save. Instead let's find out what happened and alert the user if applicable.", 3);
 			if (empty($_POST['crowdio_comment_content']))
 			{
 				$GLOBALS['crowdio_comment_submit_error'] = 'Required field was left blank.';
@@ -312,7 +310,7 @@ END;
 	}
 	
 	public function modify_page_content($content)
-	{	// This is called using a WordPress filter to show our custom comment stuff.
+	{	parent::what_is_happening("This is called using a WordPress filter to show our custom comment stuff.", 3);
 		if (is_single() && $GLOBALS['post']->post_type == 'crowdios')
 		{
 			$content .= $this->display_comments();
