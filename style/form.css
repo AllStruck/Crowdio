@@ -63,9 +63,13 @@ V 1.0
 	color: gray !important;
 }
 
+.ideaVoteTotalScore, .ideaDate {
+	font-size: .789em;
+}
+
 
 /* Style voting buttons per their vote, if they have voted. */
 .currentUserHasVotedUp .ideaVoteButton.up a,
-.currentUserHasVotedDown .ideaVoteButton.downs a {
+.currentUserHasVotedDown .ideaVoteButton.down a {
 	color: orange !important;
 }
