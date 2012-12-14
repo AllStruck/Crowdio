@@ -117,6 +117,7 @@ class CrowdioVote extends Crowdio
 		$crowdio_vote_down = "0";
 		$crowdio_unvote_up = "0";
 		$crowdio_unvote_down = "0";
+
 		if (isset($_GET['crowdio_vote']) && $_GET['crowdio_vote'] == "up") $crowdio_vote_up = "1";
 		if (isset($_GET['crowdio_vote']) && $_GET['crowdio_vote'] == "down") $crowdio_vote_down = "1";
 		if (isset($_GET['crowdio_unvote']) && $_GET['crowdio_unvote'] == "up") $crowdio_unvote_up = "1";
@@ -124,6 +125,15 @@ class CrowdioVote extends Crowdio
 
 		$existing_upvote = $wpdb->get_row("SELECT * FROM " . CROWDIO_VOTE_TABLE_NAME . " WHERE user_id = '$user_id' AND comment_id = '$comment_id' && positive = '1'");
 		$existing_downvote = $wpdb->get_row("SELECT * FROM " . CROWDIO_VOTE_TABLE_NAME . " WHERE user_id = '$user_id' AND comment_id = '$comment_id' && negative = '1'");
+
+		parent::what_is_happening("	Existing Upvote: $existing_upvote<br/>
+									Existing Downvote: $existing_downvote<br/>
+									User IP: $user_ip</br>
+									Session ID: $session_id<br/>
+									Parent ID: $parent_id<br/>
+									Comment_ID: $comment_id<br/>
+									RFI ID: $rfi_id<br/>
+									", 5);
 
 		// Determine what the current action is:
 		if (!$crowdio_vote_up && !$crowdio_vote_down)
