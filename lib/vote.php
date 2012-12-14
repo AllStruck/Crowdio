@@ -11,7 +11,7 @@ class CrowdioVote extends Crowdio
 
 	// Update comment in comments table to reflect current total in votes table:
 	function update_vote_totals() {
-		parent::debug("Updating vote totals.");
+		parent::what_is_happening("Updating vote totals.", 1);
 		global $wpdb;
 
 		$comment_id = isset($_GET['comment_id']) ? $_GET['comment_id'] : NULL;
@@ -22,8 +22,8 @@ class CrowdioVote extends Crowdio
 		$wpdb->update( 
 			CROWDIO_COMMENT_TABLE_NAME, 
 			array( 
-				'upvotes' => $new_upvotes_total, // Integer
-				'downvotes' => $new_downvotes_total // Integer
+				'upvotes' => $new_upvotes_total,
+				'downvotes' => $new_downvotes_total
 			), 
 			array( 'ID' => $comment_id )
 		);
@@ -31,14 +31,19 @@ class CrowdioVote extends Crowdio
 
 	// Add new vote to votes table:
 	function add_vote() {
-		parent::debug("Adding vote.");
+		parent::what_is_happening("Adding vote.", 1);
 		global $wpdb, $current_user;
 		get_currentuserinfo();
+		$user_id = $current_user->ID;
+
+		if (empty($user_id))
+		{
+			return false;
+		}
 
 			$name = $current_user->display_name;
 			$email = $current_user->user_email;
 			$user_ip = $_SERVER['REMOTE_ADDR'];
-			$user_id = $current_user->ID;
 			$session_id = session_id();
 			$parent_id = isset($_POST['crowdio_comment_parent_id']) ? $_POST['crowdio_comment_parent_id'] : NULL;
 			$comment_id = $_GET['comment_id'];
@@ -60,30 +65,42 @@ class CrowdioVote extends Crowdio
 				'parent_id' => $parent_id,
 				'rfi_id' => $rfi_id
 				));
+
+		return true;
 	}
 
 	// Remove existing vote from votes table:
 	function remove_vote($vote_id) {
-		parent::debug("Removing vote.");
+		parent::what_is_happening("Removing vote.", 1);
 		global $wpdb;
+		if (empty($user_id))
+		{
+			return false;
+		}
 		$crowdio_vote_table = CROWDIO_VOTE_TABLE_NAME;
 
 		$wpdb->query( 
 			$wpdb->prepare("DELETE FROM $crowdio_vote_table WHERE ID = '%s'", $vote_id)
 		);
+
+		return true;
 	}
 
 	// Take all incoming requests to manage votes,
 	// checks to make sure duplicates aren't added etc.
 	function handle_vote_submission() {
-		parent::debug("Handling vote submission.");
+		parent::what_is_happening("Handling vote submission.", 1);
 		global $current_user, $wpdb;
 		get_currentuserinfo();
+		$user_id = $current_user->ID;
 
+		if (empty($user_id)) {
+			parent::what_is_happening("Stopping since user is not logged in.", 1);
+			return false;
+		}
 		$name = $current_user->display_name;
 		$email = $current_user->user_email;
 		$user_ip = $_SERVER['REMOTE_ADDR'];
-		$user_id = $current_user->ID;
 		$session_id = session_id();
 		$parent_id = isset($_POST['crowdio_comment_parent_id']) ? $_POST['crowdio_comment_parent_id'] : NULL;
 		$comment_id = isset($_GET['comment_id']) ? $_GET['comment_id'] : NULL;
@@ -110,19 +127,16 @@ class CrowdioVote extends Crowdio
 
 		// Determine what the current action is:
 		if (!$crowdio_vote_up && !$crowdio_vote_down)
-		{	// Processing an unvote:
+		{	parent::what_is_happening('Processing an "un-vote" (undo vote).', 3);
 			if ($crowdio_unvote_up && !empty($existing_upvote))
-			{	// Clicked upvote when user already had existing upvote,
-				// Let's remove their existing upvote.
+			{	parent::what_is_happening("Clicked upvote when user already had existing upvote let's remove their existing upvote.", 3);
 				$this->remove_vote($existing_upvote->ID);
 			} elseif ($crowdio_unvote_down) {
-				// Clicked downvote when user already had existing downvote,
-				// let's remove their existing downvote:
+				parent::what_is_happening("Clicked downvote when user already had existing downvote, let's remove their existing downvote.", 3);
 				$this->remove_vote($existing_downvote->ID);
 			}
 		} elseif ($crowdio_vote_up && $existing_downvote)
-		{	// User clicked upvote, and they already have a downvote,
-			// Let's remove their downvote and make it an upvote.
+		{	parent::what_is_happening("User clicked upvote, and they already have a downvote, let's remove their downvote and make it an upvote.", 3);
 			$this->remove_vote($existing_downvote->ID);
 			$this->add_vote();
 		} elseif ($crowdio_vote_down && $existing_upvote)
@@ -138,6 +152,7 @@ class CrowdioVote extends Crowdio
 		
 		// Update the vote totals stored in the crowdio_comments table.
 		$this->update_vote_totals();
-		
+
+		return true;
 	}
 }

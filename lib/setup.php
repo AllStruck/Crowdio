@@ -9,7 +9,9 @@ class Crowdio
 	// Handle the top level setup and handling of related incoming requests:
 	public function __construct()
 	{	
-		define('CROWDIO_DEBUG_MESSAGE_LEVEL', 0);
+		// Used for debugging only, should be 0 in production, use 1-3 for debugging.
+		define('CROWDIO_DEBUG_MESSAGE_LEVEL', 3);
+
 		global $wpdb, $table_prefix;
 		session_start();
 
@@ -95,12 +97,11 @@ class Crowdio
 	}
 
 	// Helper function for debug messages on the front-end:
-	function debug($message) {
-		switch (CROWDIO_DEBUG_MESSAGE_LEVEL) {
-			case 1:
+	function what_is_happening($message, $level) {
+		if ($level <= CROWDIO_DEBUG_MESSAGE_LEVEL) {
+			if (CROWDIO_DEBUG_MESSAGE_LEVEL) {
 				print $message . "<br/>\n";
-			case 0:
-				break;
+			}
 		}
 	}
 }
