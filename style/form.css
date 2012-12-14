@@ -46,7 +46,7 @@ V 1.0
 #content .idea .currentUserHasVotedUp a,
 #content .idea .currentUserHasVotedDown a,
 #content .idea .currentUserHasVotedUp,
-#content .idea .currentUserHasVotedDown, {
-	color: "red" !important;
+#content .idea .currentUserHasVotedDown {
+	color: gray !important;
 	text-decoration: none;
 }
