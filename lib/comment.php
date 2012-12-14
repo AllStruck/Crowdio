@@ -253,7 +253,7 @@ END;
 			$crowdio_db = new CrowdioDatabase();
 			print '<div class="firstlevel">';
 			
-			$sorted_comments_levelone = $crowdio_db->get_ranked_votes('comment', $rfi_id);
+			$sorted_comments_levelone = $crowdio_db->get_ranked_ideas('comment', $rfi_id);
 
 
 			foreach ($sorted_comments_levelone as $row) {

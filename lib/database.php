@@ -55,7 +55,7 @@ class CrowdioDatabase extends Crowdio
 
 		$wpdb->query($comment_table_create_query);
 		$wpdb->query($comment_index_query);
-		
+
 		$wpdb->query($vote_table_create_query);
 		$wpdb->query($vote_index_query);
 	}
@@ -118,7 +118,7 @@ class CrowdioDatabase extends Crowdio
 	}
 
 	// Pull comments using ranking algorithm.
-	function get_ranked_votes($type, $rfi_id, $parent_id='0')
+	function get_ranked_ideas($type, $rfi_id, $parent_id='0')
 	{
 		global $wpdb;
 
@@ -136,6 +136,7 @@ class CrowdioDatabase extends Crowdio
 
 			$rfi_id = $GLOBALS['post']->ID;
 
+		// Score = Lower bound of Wilson score confidence interval for a Bernoulli parameter.
 		$ranking_query = "SELECT $comment_id_field, 
 					upvotes, downvotes, created_timestamp, comment_text, user_id, 
 					(
