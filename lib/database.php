@@ -76,10 +76,10 @@ class CrowdioDatabase extends Crowdio
 
 		// Check to make sure this isn't a duplicate content:
 		$current_user_id = get_current_user_id();
-		$duplicates = $wpdb->get_results("SELECT comment_text FROM " . CROWDIO_COMMENT_TABLE_NAME . " WHERE user_id = '$current_user_id' AND comment_text == '$comment_text' ");
+		$duplicates = $wpdb->get_results("SELECT * FROM " . CROWDIO_COMMENT_TABLE_NAME . " WHERE user_id = '$current_user_id' AND comment_text = '$comment_text' ");
 
-		if (count($duplicates) > 0) {
-			// write data to SQL $wpdb->insert( $table, $data, $format );
+		if (!$duplicates) {
+			parent::explain("Comment not a duplicate, adding to database.", 3);
 			$wpdb->insert(CROWDIO_COMMENT_TABLE_NAME,
 				array(
 					'name' => $name,
@@ -97,7 +97,7 @@ class CrowdioDatabase extends Crowdio
 				);
 			if ($wpdb->insert_id)
 			{
-				// Add one vote up for new comment:
+				parent::explain("Adding one vote up for new comment.", 3);
 				$wpdb->insert(CROWDIO_VOTE_TABLE_NAME,
 					array(
 						'comment_id' => $wpdb->insert_id,
@@ -112,12 +112,16 @@ class CrowdioDatabase extends Crowdio
 				} else
 				{
 					print 'Comment was inserted but default upvote was not.'; $wpdb->print_error();
+					return False;
 				}
 			} else
 			{
+				$
 				$wpdb->show_errors();
 				print 'Error with $wpdb->insert(): '; $wpdb->print_error();
 			}
+		} else {
+			parent::explain("Comment is a duplicate, did not add to database.");
 		}
 
 	
