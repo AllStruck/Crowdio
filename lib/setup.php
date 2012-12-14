@@ -99,7 +99,7 @@ class Crowdio
 	}
 
 	// Helper function for debug messages on the front-end:
-	public function what_is_happening($message, $level) {
+	public function explain($message, $level) {
 		if ($level <= CROWDIO_DEBUG_MESSAGE_LEVEL) {
 			if (CROWDIO_DEBUG_MESSAGE_LEVEL) {
 				//print $message . "<br/>\n";

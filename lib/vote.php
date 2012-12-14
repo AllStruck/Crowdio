@@ -11,7 +11,7 @@ class CrowdioVote extends Crowdio
 
 	// Update comment in comments table to reflect current total in votes table:
 	function update_vote_totals() {
-		parent::what_is_happening("Updating vote totals.", 1);
+		parent::explain("Updating vote totals.", 1);
 		global $wpdb;
 
 		$comment_id = isset($_GET['comment_id']) ? $_GET['comment_id'] : NULL;
@@ -31,7 +31,7 @@ class CrowdioVote extends Crowdio
 
 	// Add new vote to votes table:
 	function add_vote() {
-		parent::what_is_happening("Adding vote.", 1);
+		parent::explain("Adding vote.", 1);
 		global $wpdb, $current_user;
 		get_currentuserinfo();
 		$user_id = $current_user->ID;
@@ -71,7 +71,7 @@ class CrowdioVote extends Crowdio
 
 	// Remove existing vote from votes table:
 	function remove_vote($vote_id) {
-		parent::what_is_happening("Removing vote.", 1);
+		parent::explain("Removing vote.", 1);
 		global $wpdb;
 		if (empty($user_id))
 		{
@@ -89,13 +89,13 @@ class CrowdioVote extends Crowdio
 	// Take all incoming requests to manage votes,
 	// checks to make sure duplicates aren't added etc.
 	function handle_vote_submission() {
-		parent::what_is_happening("Handling vote submission.", 1);
+		parent::explain("Handling vote submission.", 1);
 		global $current_user, $wpdb;
 		get_currentuserinfo();
 		$user_id = $current_user->ID;
 
 		if (empty($user_id)) {
-			parent::what_is_happening("Stopping since user is not logged in.", 1);
+			parent::explain("Stopping since user is not logged in.", 1);
 			return false;
 		}
 		$name = $current_user->display_name;
@@ -109,7 +109,7 @@ class CrowdioVote extends Crowdio
 		$the_comment = $wpdb->get_row("SELECT * FROM " . CROWDIO_COMMENT_TABLE_NAME . " WHERE ID = '$comment_id'");
 		if (!$the_comment)
 		{
-			parent::what_is_happening('Trying to vote on nonexisting comment, stopping here.');
+			parent::explain('Trying to vote on nonexisting comment, stopping here.');
  			return false;
 		}
 
@@ -130,24 +130,24 @@ class CrowdioVote extends Crowdio
 
 		// Determine what the current action is:
 		if (!$crowdio_vote_up && !$crowdio_vote_down)
-		{	parent::what_is_happening('Processing an "un-vote".', 3);
+		{	parent::explain('Processing an "un-vote".', 3);
 			if ($crowdio_unvote_up && !empty($existing_upvote))
-			{	parent::what_is_happening("Remomve existing upvote.", 3);
+			{	parent::explain("Remomve existing upvote.", 3);
 				$this->remove_vote($existing_upvote->ID);
 			} elseif ($crowdio_unvote_down) {
-				parent::what_is_happening("Remove existing downvote.", 3);
+				parent::explain("Remove existing downvote.", 3);
 				$this->remove_vote($existing_downvote->ID);
 			}
 		} elseif ($crowdio_vote_up && $existing_downvote)
-		{	parent::what_is_happening("Convert downvote to upvote.", 3);
+		{	parent::explain("Convert downvote to upvote.", 3);
 			$this->remove_vote($existing_downvote->ID);
 			$this->add_vote();
 		} elseif ($crowdio_vote_down && $existing_upvote)
-		{	parent::what_is_happening("Convert upvote to downvote.", 3);
+		{	parent::explain("Convert upvote to downvote.", 3);
 			$this->remove_vote($existing_upvote->ID);
 			$this->add_vote();
 		} elseif (($crowdio_vote_up || $crowdio_vote_down) && (!$existing_upvote && !$existing_downvote)) {
-			parent::what_is_happening("Add fresh vote.", 3);
+			parent::explain("Add fresh vote.", 3);
 			$this->add_vote();
 		}
 		
