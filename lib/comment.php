@@ -130,7 +130,7 @@ END;
 			$current_address_including_action = $_SERVER["REQUEST_URI"];
 			print <<<END
 				<div class="crowdioFormNotice">
-					<span class="noticeText">Please <a href="wp-login.php?redirect_to=$current_address_including_action">Log In</a> or <a href="/wp-login.php?action=register">Register</a> to add your idea.</span>
+					<span class="noticeText">Please <a href="/wp-login.php?redirect_to=$current_address_including_action">Log In</a> or <a href="/wp-login.php?action=register">Register</a> to add your idea.</span>
 				</div>
 END;
 		}
