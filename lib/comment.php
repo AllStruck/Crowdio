@@ -184,7 +184,7 @@ END;
 		{
 			$current_visitor_user_id = get_current_user_id();
 			$user_id = $comment_row->user_id;
-			$created = $comment_row->created_timestamp;
+			$created = date(get_option('date_format')." ".get_option('time_format'), strtotime($comment_row->created_timestamp));
 			$name = $commentUserData->display_name;
 			$url = $commentUserData->user_url;
 			$comment = stripcslashes($comment_row->comment_text);
@@ -209,15 +209,21 @@ END;
 			} else {
 				$has_voted_class = "currentUserHasNotVoted";
 			}
-			 
-			$crowdio_vote_up_url = $existing_upvote ? 
-				"$current_page_url?crowdio_unvote=up&comment_id=$comment_id" : // Unvote up
-				"$current_page_url?crowdio_vote=up&comment_id=$comment_id"; // Regular vote up
-			$crowdio_vote_down_url = $existing_downvote ? 
-				"$current_page_url?crowdio_unvote=down&comment_id=$comment_id" : // Unvote down
-				"$current_page_url?crowdio_vote=down&comment_id=$comment_id&rfi_id=$rfi_id"; // Regular vote up
+			
+			if (!is_user_logged_in()) {
+				// Prepend action vote/reply action link urls with login redirect if visitor not logged in.
+				$crowdio_vote_up_url =  $crowdio_vote_down_url = "/wp-login.php?redirect_to=$current_page_url";
 
-			$direct_to_login_url = is_user_logged_in() ? "" : "/wp-login.php?redirect_to=";
+			} else {
+				// Set vote link urls depending on if user has voted
+				$crowdio_vote_up_url .= $existing_upvote ? 
+					"$current_page_url?crowdio_unvote=up&comment_id=$comment_id" : // Unvote up
+					"$current_page_url?crowdio_vote=up&comment_id=$comment_id"; // Regular vote up
+				$crowdio_vote_down_url .= $existing_downvote ? 
+					"$current_page_url?crowdio_unvote=down&comment_id=$comment_id" : // Unvote down
+					"$current_page_url?crowdio_vote=down&comment_id=$comment_id&rfi_id=$rfi_id"; // Regular vote up
+			}
+
 
 			// Reply link URL:
 			$reply_link_url = $current_page_url . "?replyto=$comment_id#replyform";
@@ -226,22 +232,26 @@ END;
 			$comment_upvotes_count = $wpdb->get_var("SELECT COUNT(*) FROM " . CROWDIO_VOTE_TABLE_NAME . " WHERE comment_id = '$comment_id' AND positive = '1'");
 			$comment_downvotes_count = $wpdb->get_var("SELECT COUNT(*) FROM " . CROWDIO_VOTE_TABLE_NAME . " WHERE comment_id = '$comment_id' AND negative = '1'");
 
+			// Tally basic score of vote (upvotes - downvotes).
 			$comment_vote_score = $comment_row->upvotes - $comment_row->downvotes;
+			
+			// Set up dofollow/nofollow for comment author link.
 			$follow = $comment_vote_score > 10 ? "dofollow" : "nofollow";
+
 		    print <<<END
 				<div class="idea">
 					<div class="ideaInfo">
-						<span class="ideaDate">$created</span>:
 						<span class="ideaName"> <a href="$url" rel="$follow">$name</a></span>
-						<span> said:</span>
+						<span class="ideaVoteTotalScore">Score: [$comment_vote_score] </span>
+						<span class="ideaDate">$created</span>
 					</div>
 
 					<div class="ideaContent">$comment</div>
 					
 					<div class="ideaVoteReplyButtons $has_voted_class">
-						<span class="ideaVoteButton up"><a href="$direct_to_login_url$crowdio_vote_up_url">$up_vote_icon</a> [$comment_upvotes_count] </span>
-						<span class="ideaVoteButton down"><a href="$direct_to_login_url$crowdio_vote_down_url">$down_vote_icon</a> [$comment_downvotes_count] </span>
-						<span class="ideaVoteTotalScore">Score: [$comment_vote_score] </span>
+						<span class="ideaVoteButton up"><a href="$direct_to_login_url$crowdio_vote_up_url">$up_vote_icon</a> $comment_upvotes_count </span>
+						<span class="ideaVoteButton down"><a href="$direct_to_login_url$crowdio_vote_down_url">$down_vote_icon</a> $comment_downvotes_count </span>
+						
 						<span class="ideaReplyButton"><a href="$reply_link_url">Reply</a></span>
 					</div>
 				</div>
