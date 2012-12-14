@@ -9,7 +9,7 @@ class Crowdio
 	// Handle the top level setup and handling of related incoming requests:
 	public function __construct()
 	{	
-		// Used for debugging only, should be 0 in production, use 1-3 for debugging.
+		// Used for debugging only, should be 0 in production, use 1-5 for debugging (5=verbose, 0=silent).
 		define('CROWDIO_DEBUG_MESSAGE_LEVEL', 5);
 
 		add_action('wp_footer', array($this, 'add_debug_messages_in_console'));
