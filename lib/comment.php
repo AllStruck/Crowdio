@@ -191,7 +191,7 @@ END;
 			$rfi_id = $GLOBALS['post']->ID;
 
 			// Url of current page (without any GET vars):
-			$current_page_url = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : NULL;
+			$current_page_url = get_permalink( $rfi_id );
 			
 			// Check for existing vote on this comment by this user:
 			$existing_upvote = $wpdb->get_row("SELECT * FROM " . CROWDIO_VOTE_TABLE_NAME . " WHERE comment_id = '$comment_id' AND user_id = '$user_id' AND positive = 1");
@@ -207,6 +207,8 @@ END;
 			$crowdio_vote_down_url = $existing_downvote ? 
 				"$current_page_url?crowdio_unvote=down&comment_id=$comment_id" : // Unvote down
 				"$current_page_url?crowdio_vote=down&comment_id=$comment_id&rfi_id=$rfi_id"; // Regular vote up
+
+			$direct_to_login_url = is_user_logged_in() ? "" : "/wp-login.php?redirect_to=";
 
 			// Reply link URL:
 			$reply_link_url = $current_page_url . "?replyto=$comment_id#replyform";
@@ -229,8 +231,8 @@ END;
 					
 					<div class="ideaVoteReplyButtons">
 						<span class="ideaVotePrompt">Vote </span>
-						<span class="ideaVoteButton up $has_voted_up_class"><a href="$crowdio_vote_up_url">&#8743;</a> [$comment_upvotes_count] </span>
-						<span class="ideaVoteButton down $has_voted_down_class"><a href="$crowdio_vote_down_url">&#8744;</a> [$comment_downvotes_count] </span>
+						<span class="ideaVoteButton up $has_voted_up_class"><a href="$direct_to_login_url$crowdio_vote_up_url">&#8743;</a> [$comment_upvotes_count] </span>
+						<span class="ideaVoteButton down $has_voted_down_class"><a href="$direct_to_login_url$crowdio_vote_down_url">&#8744;</a> [$comment_downvotes_count] </span>
 						<span class="ideaVoteTotalScore">Score: [$comment_vote_score] </span>
 						<span class="ideaReplyButton"><a href="$reply_link_url">Reply</a></span>
 					</div>
