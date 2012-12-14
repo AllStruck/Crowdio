@@ -72,9 +72,13 @@ class CrowdioVote extends Crowdio
 	// Remove existing vote from votes table:
 	function remove_vote($vote_id) {
 		parent::explain("Removing vote.", 1);
-		global $wpdb;
+		global $wpdb, $current_user;
+		get_currentuserinfo();
+		$user_id = $current_user->ID;
+
 		if (empty($user_id))
 		{
+			parent::explain("PROBLEM: Missing \$user_id\. Vote not removed.");
 			return false;
 		}
 		$crowdio_vote_table = CROWDIO_VOTE_TABLE_NAME;
@@ -132,7 +136,7 @@ class CrowdioVote extends Crowdio
 		if (!$crowdio_vote_up && !$crowdio_vote_down)
 		{	parent::explain('Processing an "un-vote".', 3);
 			if ($crowdio_unvote_up && !empty($existing_upvote))
-			{	parent::explain("Remomve existing upvote.", 3);
+			{	parent::explain("Remove existing upvote.", 3);
 				$this->remove_vote($existing_upvote->ID);
 			} elseif ($crowdio_unvote_down) {
 				parent::explain("Remove existing downvote.", 3);
@@ -151,7 +155,7 @@ class CrowdioVote extends Crowdio
 			$this->add_vote();
 		}
 		
-		// Update the vote totals stored in the crowdio_comments table.
+		parent::explain("Refreshing vote totals on comment id: $comment_id", 3);
 		$this->update_vote_totals();
 
 		return true;

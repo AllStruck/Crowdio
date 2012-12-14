@@ -33,6 +33,8 @@ class CrowdioDatabase extends Crowdio
 				PRIMARY KEY (ID)
 				)
 			ENGINE = myisam DEFAULT CHARACTER SET = utf8;";
+		$comment_index_query = "
+			CREATE INDEX crowdio_comment_index ON $crowdio_comment_table_name (id) USING BTREE";
 		
 		$vote_table_create_query = "
 			CREATE TABLE IF NOT EXISTS $crowdio_vote_table_name (
@@ -48,9 +50,14 @@ class CrowdioDatabase extends Crowdio
 				rfi_id BIGINT(20), 
 				PRIMARY KEY (ID) )
 			ENGINE = myisam DEFAULT CHARACTER SET = utf8";
-		
+		$vote_index_query = "
+		CREATE INDEX crowdio_vote_index ON $crowdio_vote_table_name (id) USING BTREE";
+
 		$wpdb->query($comment_table_create_query);
+		$wpdb->query($comment_index_query);
+		
 		$wpdb->query($vote_table_create_query);
+		$wpdb->query($vote_index_query);
 	}
 
 	// Add comment to database:
