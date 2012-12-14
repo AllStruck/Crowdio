@@ -167,10 +167,6 @@ class CrowdioDatabase extends Crowdio
 
 		$results = $wpdb->get_results($ranking_query);
 
-		//usort($results, array($this, 'sort_ranked_votes'));
-
-		//return $results;
-
 		return $results;
 
 	}
