@@ -290,7 +290,7 @@ END;
 	}
 
 	public function check_comment_submission()
-	{	parent::what_is_happening("A submit on the comment form was sent, let's make sure we have everything needed.", 3);
+	{	parent::explain("A submit on the comment form was sent, let's make sure we have everything needed.", 3);
 		if (!empty($_POST['crowdio_comment_user_id']) &&
 		!empty($_POST['crowdio_comment_name']) &&
 		!empty($_POST['crowdio_comment_email']) &&
@@ -300,7 +300,7 @@ END;
 		{	// Looks good, let's start adding the new comment.
 			$this->add_comment();
 		} else
-		{	parent::what_is_happening("Missing needed data, not going to save. Instead let's find out what happened and alert the user if applicable.", 3);
+		{	parent::explain("Missing needed data, not going to save. Instead let's find out what happened and alert the user if applicable.", 3);
 			if (empty($_POST['crowdio_comment_content']))
 			{
 				$GLOBALS['crowdio_comment_submit_error'] = 'Required field was left blank.';
@@ -310,7 +310,7 @@ END;
 	}
 	
 	public function modify_page_content($content)
-	{	//parent::what_is_happening("This is called using a WordPress filter to show our custom comment stuff.", 3);
+	{	//parent::explain("This is called using a WordPress filter to show our custom comment stuff.", 3);
 		if (is_single() && $GLOBALS['post']->post_type == 'crowdios')
 		{
 			$content .= $this->display_comments();
