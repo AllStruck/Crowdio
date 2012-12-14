@@ -310,7 +310,7 @@ END;
 	}
 	
 	public function modify_page_content($content)
-	{	parent::what_is_happening("This is called using a WordPress filter to show our custom comment stuff.", 3);
+	{	//parent::what_is_happening("This is called using a WordPress filter to show our custom comment stuff.", 3);
 		if (is_single() && $GLOBALS['post']->post_type == 'crowdios')
 		{
 			$content .= $this->display_comments();

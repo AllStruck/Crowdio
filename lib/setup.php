@@ -10,8 +10,10 @@ class Crowdio
 	public function __construct()
 	{	
 		// Used for debugging only, should be 0 in production, use 1-3 for debugging.
-		define('CROWDIO_DEBUG_MESSAGE_LEVEL', 3);
+		define('CROWDIO_DEBUG_MESSAGE_LEVEL', 5);
 
+		add_action('wp_footer', array($this, 'add_debug_messages_in_console'));
+		
 		global $wpdb, $table_prefix;
 		session_start();
 
@@ -97,12 +99,25 @@ class Crowdio
 	}
 
 	// Helper function for debug messages on the front-end:
-	function what_is_happening($message, $level) {
+	public function what_is_happening($message, $level) {
 		if ($level <= CROWDIO_DEBUG_MESSAGE_LEVEL) {
 			if (CROWDIO_DEBUG_MESSAGE_LEVEL) {
-				print $message . "<br/>\n";
+				//print $message . "<br/>\n";
+				$GLOBALS['console_messages'] .= $message.'\n';
 			}
 		}
+	}
+	public function add_debug_messages_in_console()
+	{
+		$message = preg_replace("/\"/", "\\\"", $GLOBALS['console_messages']);
+
+		echo <<<END
+			<script type="text/javascript">
+				window.onload = function() {
+					console.log("$message");
+				};
+			</script>
+END;
 	}
 }
 
