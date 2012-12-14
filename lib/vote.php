@@ -109,7 +109,7 @@ class CrowdioVote extends Crowdio
 		$the_comment = $wpdb->get_row("SELECT * FROM " . CROWDIO_COMMENT_TABLE_NAME . " WHERE ID = '$comment_id'");
 		if (!$the_comment)
 		{
-			// Trying to vote on nonexisting comment, stopping here.
+			parent::what_is_happening('Trying to vote on nonexisting comment, stopping here.');
  			return false;
 		}
 
@@ -130,24 +130,24 @@ class CrowdioVote extends Crowdio
 
 		// Determine what the current action is:
 		if (!$crowdio_vote_up && !$crowdio_vote_down)
-		{	parent::what_is_happening('Processing an "un-vote" (undo vote).', 3);
+		{	parent::what_is_happening('Processing an "un-vote".', 3);
 			if ($crowdio_unvote_up && !empty($existing_upvote))
-			{	parent::what_is_happening("Clicked upvote when user already had existing upvote let's remove their existing upvote.", 3);
+			{	parent::what_is_happening("Remomve existing upvote.", 3);
 				$this->remove_vote($existing_upvote->ID);
 			} elseif ($crowdio_unvote_down) {
-				parent::what_is_happening("Clicked downvote when user already had existing downvote, let's remove their existing downvote.", 3);
+				parent::what_is_happening("Remove existing downvote.", 3);
 				$this->remove_vote($existing_downvote->ID);
 			}
 		} elseif ($crowdio_vote_up && $existing_downvote)
-		{	parent::what_is_happening("User clicked upvote, and they already have a downvote, let's remove their downvote and make it an upvote.", 3);
+		{	parent::what_is_happening("Convert downvote to upvote.", 3);
 			$this->remove_vote($existing_downvote->ID);
 			$this->add_vote();
 		} elseif ($crowdio_vote_down && $existing_upvote)
-		{	parent::what_is_happening("User cicked downvote, and they already have an upvote, let's remove their upvote and make it a downvote.", 3);
+		{	parent::what_is_happening("Convert upvote to downvote.", 3);
 			$this->remove_vote($existing_upvote->ID);
 			$this->add_vote();
 		} elseif (($crowdio_vote_up || $crowdio_vote_down) && (!$existing_upvote && !$existing_downvote)) {
-			parent::what_is_happening("User wants to vote and hasn't voted at all yet... we'll just add their vote in.", 3);
+			parent::what_is_happening("Add fresh vote.", 3);
 			$this->add_vote();
 		}
 		
