@@ -117,6 +117,7 @@ class Crowdio
 			<script type="text/javascript">
 				window.onload = function() {
 					console.log("$message");
+					console.info("$message");
 				};
 			</script>
 END;
